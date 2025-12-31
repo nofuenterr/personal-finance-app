@@ -20,9 +20,31 @@
 	font-display: swap;
 }
 
-/* @theme {
+@theme {
 	--color-*: initial;
-} */
+	--color-beige-500: hsl(23, 6%, 57%);
+	--color-beige-100: #f8f4f0;
+	--color-gray-900: #201f24;
+	--color-gray-500: #696868;
+	--color-gray-300: #b3b3b3;
+	--color-gray-100: #f2f2f2;
+	--color-green: #277c78;
+	--color-yellow: #f2cdac;
+	--color-cyan: #82c9d7;
+	--color-navy: #626070;
+	--color-red: #c94736;
+	--color-purple: #826cb0;
+	--color-turquoise: #597c7c;
+	--color-brown: #93674f;
+	--color-magenta: #934f6f;
+	--color-blue: #3f82b2;
+	--color-navy-gray: #97a0ac;
+	--color-army-green: #7f9161;
+	--color-pink: #af81ba;
+	--color-gold: #7f9161;
+	--color-orange: #be6c49;
+	--color-white: #ffffff;
+}
 
 /* @layer utilities {
 	.no-spinner {
