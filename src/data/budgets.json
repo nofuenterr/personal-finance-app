@@ -1,0 +1,26 @@
+[
+	{
+		"category": "Entertainment",
+		"maximum": 50.0,
+		"theme": "green",
+		"spent": 15.0
+	},
+	{
+		"category": "Bills",
+		"maximum": 750.0,
+		"theme": "cyan",
+		"spent": 150.0
+	},
+	{
+		"category": "Dining Out",
+		"maximum": 75.0,
+		"theme": "yellow",
+		"spent": 133.75
+	},
+	{
+		"category": "Personal Care",
+		"maximum": 100.0,
+		"theme": "navy",
+		"spent": 40.0
+	}
+]
