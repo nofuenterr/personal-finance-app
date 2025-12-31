@@ -1,0 +1,61 @@
+@import 'tailwindcss';
+
+@font-face {
+	font-family: 'Public Sans';
+	src:
+		url('../assets/fonts/PublicSans-Regular.woff2') format('woff2'),
+		url('../assets/fonts/PublicSans-Regular.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Public Sans';
+	src:
+		url('../assets/fonts/PublicSans-Bold.woff2') format('woff2'),
+		url('../assets/fonts/PublicSans-Bold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* @theme {
+	--color-*: initial;
+} */
+
+/* @layer utilities {
+	.no-spinner {
+		appearance: textfield;
+	}
+
+	.no-spinner::-webkit-inner-spin-button,
+	.no-spinner::-webkit-outer-spin-button {
+		appearance: none;
+		margin: 0;
+	}
+} */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+	font-family: 'Public Sans', system-ui, Avenir, Helvetica, Arial, sans-serif;
+	font-size: 1rem;
+	font-weight: 400;
+
+	font-synthesis: none;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* *:focus-visible {
+	outline: 4px double hsl(160, 67%, 52%);
+	outline-offset: -4px;
+	outline-style: double;
+} */
+
+body {
+	min-height: 100dvh;
+	position: relative;
+}
