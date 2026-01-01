@@ -3,6 +3,7 @@ import { useState } from 'react';
 import logoLarge from '../assets/icons/logo-large.svg';
 import logoSmall from '../assets/icons/logo-small.svg';
 import SidebarIcons, { SidebarIconsType } from './ui/SidebarIcons';
+import Tooltip from './Tooltip';
 
 export default function Sibebar() {
 	const [open, setOpen] = useState<boolean>(true);
@@ -47,16 +48,18 @@ export default function Sibebar() {
 					onClick={() => setOpen((s) => !s)}
 					className="group flex w-full cursor-pointer items-center gap-4 leading-normal font-bold text-gray-300 transition-colors duration-250 hover:text-gray-100"
 				>
-					<div
-						className={
-							'grid size-6 place-content-center ' + (open ? '' : 'rotate-180')
-						}
-					>
-						<SidebarIcons
-							icon="minimizeMenu"
-							className="fill-gray-300 group-hover:fill-gray-100"
-						/>
-					</div>
+					<Tooltip content="Minimize Menu">
+						<div
+							className={
+								'grid size-6 place-content-center ' + (open ? '' : 'rotate-180')
+							}
+						>
+							<SidebarIcons
+								icon="minimizeMenu"
+								className="fill-gray-300 group-hover:fill-gray-100"
+							/>
+						</div>
+					</Tooltip>
 					<p className={open ? '' : 'lg:hidden'}>Minimize Menu</p>
 				</button>
 			</div>
@@ -83,12 +86,14 @@ function NavListItem({ to = '', icon, text, open }: NavListItemProps) {
 					].join(' ')
 				}
 			>
-				<div className="grid size-6 place-content-center">
-					<SidebarIcons
-						icon={icon}
-						className="group-[.active]:fill-green fill-gray-300 group-hover:fill-gray-100"
-					/>
-				</div>
+				<Tooltip content={text}>
+					<div className="grid size-6 place-content-center">
+						<SidebarIcons
+							icon={icon}
+							className="group-[.active]:fill-green fill-gray-300 group-hover:fill-gray-100"
+						/>
+					</div>
+				</Tooltip>
 				<p className={'hidden md:block ' + (open ? '' : 'lg:hidden')}>{text}</p>
 			</NavLink>
 		</li>
