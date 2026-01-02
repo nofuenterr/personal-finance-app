@@ -1,3 +1,215 @@
+import ContentWrapper from '../components/ContentWrapper';
+import Dialog from '../components/Dialog';
+import DropdownMenu from '../components/DropdownMenu';
+import { useBudgetsStore, type Budget } from '../stores/budgets';
+import type { Colors } from '../types/colors';
+import formatPrice from '../utils/formatPrice';
+import { Progress } from 'radix-ui';
+import getPercentage from '../utils/getPercentage';
+import ScrollArea from '../components/ScrollArea';
+
 export default function Budgets() {
-	return <>Budgets</>;
+	const budgets = useBudgetsStore((s) => s.budgets);
+
+	const THEME_COLORS: Record<Colors, string> = {
+		green: 'var(--color-green)',
+		yellow: 'var(--color-yellow)',
+		cyan: 'var(--color-cyan)',
+		navy: 'var(--color-navy)',
+		red: 'var(--color-red)',
+		purple: 'var(--color-purple)',
+		turquoise: 'var(--color-turquoise)',
+		brown: 'var(--color-brown)',
+		magenta: 'var(--color-magenta)',
+		blue: 'var(--color-blue)',
+		'navy-gray': 'var(--color-navy-gray)',
+		'army-green': 'var(--color-army-green)',
+		pink: 'var(--color-pink)',
+		gold: 'var(--color-gold)',
+		orange: 'var(--color-orange)',
+	};
+
+	const getRemainingBudget = (maximum: number, spent: number): string => {
+		const remaining = maximum - spent;
+		const adjustedRemaining = remaining >= 0 ? remaining : 0;
+
+		return `$${formatPrice(adjustedRemaining)}`;
+	};
+
+	return (
+		<ContentWrapper
+			title="Budgets"
+			addButton={
+				<Dialog
+					trigger={
+						<button className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500">
+							+ Add New Budget
+						</button>
+					}
+					title="Add New Budget"
+					description="Choose a category to set a spending budget. These categories can help you monitor spending."
+					buttonText="Add Budget"
+				>
+					<div>
+						<form action=""></form>
+					</div>
+				</Dialog>
+			}
+		>
+			<ScrollArea>
+				<div className="grid items-start gap-6 lg:grid-cols-2">
+					<div className="grid gap-8 rounded-xl bg-white px-5 py-6 md:grid-cols-2 lg:grid-cols-1">
+						<div>
+							<p>Pie Chart here</p>
+						</div>
+						<div className="grid gap-6">
+							<h2 className="text-xl leading-tight font-bold text-gray-900">
+								Spending Summary
+							</h2>
+							<ul className="grid gap-4">
+								{budgets.map((budget) => {
+									return (
+										<li key={budget.category}>
+											<div className="flex items-center gap-4">
+												<div
+													className="h-5 w-1 rounded-lg"
+													style={{
+														backgroundColor: THEME_COLORS[budget.theme],
+													}}
+												></div>
+												<p className="mr-auto text-sm leading-tight text-gray-500">
+													{budget.category}
+												</p>
+												<p className="flex items-center gap-2">
+													<span className="leading-normal font-bold text-gray-900">
+														${formatPrice(budget.spent)}
+													</span>
+													<span className="text-xs leading-normal text-gray-500">
+														of ${formatPrice(budget.maximum)}
+													</span>
+												</p>
+											</div>
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					</div>
+
+					<div>
+						<ul className="grid gap-6">
+							{budgets.map((budget) => {
+								return (
+									<BudgetCard
+										key={budget.category}
+										budget={budget}
+										theme={THEME_COLORS[budget.theme]}
+										getRemainingBudget={getRemainingBudget}
+									/>
+								);
+							})}
+						</ul>
+					</div>
+				</div>
+			</ScrollArea>
+		</ContentWrapper>
+	);
+}
+
+interface BudgetCardProps {
+	budget: Budget;
+	theme: string;
+	getRemainingBudget: (maximum: number, spent: number) => string;
+}
+
+function BudgetCard({ budget, theme, getRemainingBudget }: BudgetCardProps) {
+	const initial = getPercentage(budget.spent, budget.maximum);
+	const progress = initial > 100 ? 100 : initial;
+
+	return (
+		<li>
+			<div className="grid gap-5 rounded-xl bg-white px-5 py-6 md:p-8">
+				<div className="flex items-center justify-between">
+					<div className="flex items-center gap-4">
+						<div
+							className={`size-4 rounded-full`}
+							style={{ backgroundColor: theme }}
+						></div>
+						<h2 className="text-xl leading-tight font-bold text-gray-900">
+							{budget.category}
+						</h2>
+					</div>
+					<DropdownMenu
+						name={budget.category}
+						type="budget"
+						typeCapitalized="Budget"
+						editDescription="As your budgets change, feel free to update your spending limits."
+						editContent={<div></div>}
+					>
+						<button className="cursor-pointer">
+							<svg
+								width="15"
+								height="15"
+								viewBox="0 0 15 15"
+								fill="none"
+								xmlns="http://www.w3.org/2000/svg"
+							>
+								<path
+									d="M3.625 7.5C3.625 8.12132 3.12132 8.625 2.5 8.625C1.87868 8.625 1.375 8.12132 1.375 7.5C1.375 6.87868 1.87868 6.375 2.5 6.375C3.12132 6.375 3.625 6.87868 3.625 7.5ZM8.625 7.5C8.625 8.12132 8.12132 8.625 7.5 8.625C6.87868 8.625 6.375 8.12132 6.375 7.5C6.375 6.87868 6.87868 6.375 7.5 6.375C8.12132 6.375 8.625 6.87868 8.625 7.5ZM12.5 8.625C13.1213 8.625 13.625 8.12132 13.625 7.5C13.625 6.87868 13.1213 6.375 12.5 6.375C11.8787 6.375 11.375 6.87868 11.375 7.5C11.375 8.12132 11.8787 8.625 12.5 8.625Z"
+									className="fill-gray-300"
+									fillRule="evenodd"
+									clipRule="evenodd"
+								></path>
+							</svg>
+						</button>
+					</DropdownMenu>
+				</div>
+
+				<div className="grid gap-4">
+					<p className="text-sm leading-normal text-gray-500">
+						Maximum of ${formatPrice(budget.maximum)}
+					</p>
+					<div className="bg-beige-100 rounded-sm p-1">
+						<Progress.Root
+							className="bg-beige-100 relative h-6 w-full translate-z-0 overflow-hidden rounded-sm"
+							value={progress}
+						>
+							<Progress.Indicator
+								className={
+									'h-full w-full rounded-sm transition-transform duration-660 ease-out'
+								}
+								style={{
+									transform: `translateX(-${100 - progress}%)`,
+									backgroundColor: theme,
+								}}
+							/>
+						</Progress.Root>
+					</div>
+					<div className="flex items-center gap-4">
+						<div className="flex flex-1 items-center gap-4">
+							<div
+								className="h-11 w-1 rounded-lg"
+								style={{ backgroundColor: theme }}
+							></div>
+							<div className="grid gap-1">
+								<p className="text-xs leading-normal text-gray-500">Spent</p>
+								<p className="text-sm leading-normal font-bold text-gray-900">
+									${formatPrice(budget.spent)}
+								</p>
+							</div>
+						</div>
+						<div className="flex flex-1 items-center gap-4">
+							<div className="bg-beige-100 h-11 w-1 rounded-lg"></div>
+							<div className="grid gap-1">
+								<p className="text-xs leading-normal text-gray-500">Free</p>
+								<p className="text-sm leading-normal font-bold text-gray-900">
+									{getRemainingBudget(budget.maximum, budget.spent)}
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+	);
 }

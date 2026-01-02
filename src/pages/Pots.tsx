@@ -6,6 +6,7 @@ import ScrollArea from '../components/ScrollArea';
 import DropdownMenu from '../components/DropdownMenu';
 import Dialog from '../components/Dialog';
 import type { Colors } from '../types/colors';
+import ContentWrapper from '../components/ContentWrapper';
 
 export default function Pots() {
 	const pots = usePotsStore((s) => s.pots);
@@ -29,11 +30,9 @@ export default function Pots() {
 	};
 
 	return (
-		<div className="bg-beige-100 grid h-full flex-1 content-start gap-8 px-4 py-6 md:px-10 md:py-8">
-			<header className="flex items-center justify-between">
-				<h1 className="text-[2rem] leading-tight font-bold text-gray-900">
-					Pots
-				</h1>
+		<ContentWrapper
+			title="Pots"
+			addButton={
 				<Dialog
 					trigger={
 						<button className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500">
@@ -48,23 +47,22 @@ export default function Pots() {
 						<form action=""></form>
 					</div>
 				</Dialog>
-			</header>
-			<main className="flex-1 overflow-hidden">
-				<ScrollArea>
-					<ul className="grid grid-cols-1 gap-6 md:grid-cols-[repeat(auto-fill,minmax(32.375rem,1fr))]">
-						{pots.map((pot: Pot) => {
-							return (
-								<PotCard
-									key={pot.name}
-									pot={pot}
-									theme={THEME_COLORS[pot.theme]}
-								/>
-							);
-						})}
-					</ul>
-				</ScrollArea>
-			</main>
-		</div>
+			}
+		>
+			<ScrollArea>
+				<ul className="grid grid-cols-1 gap-6 md:grid-cols-[repeat(auto-fill,minmax(32.375rem,1fr))]">
+					{pots.map((pot: Pot) => {
+						return (
+							<PotCard
+								key={pot.name}
+								pot={pot}
+								theme={THEME_COLORS[pot.theme]}
+							/>
+						);
+					})}
+				</ul>
+			</ScrollArea>
+		</ContentWrapper>
 	);
 }
 
