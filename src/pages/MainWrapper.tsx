@@ -1,13 +1,16 @@
 import { Outlet } from 'react-router-dom';
-import Sibebar from '../components/Sidebar';
+import Sidebar from '../components/Sidebar';
 
 export default function MainWrapper() {
 	return (
 		<div className="flex h-dvh flex-col lg:flex-row-reverse">
-			<main className="flex-1">
+			<div className="flex-1 overflow-y-auto">
 				<Outlet />
-			</main>
-			<Sibebar />
+			</div>
+
+			<div className="shrink-0">
+				<Sidebar />
+			</div>
 		</div>
 	);
 }

@@ -1,3 +1,3 @@
-export default function getPercentage(amount: number, target: number): string {
-	return ((amount / target) * 100).toFixed(2) + '%';
+export default function getPercentage(amount: number, target: number): number {
+	return (amount / target) * 100;
 }
