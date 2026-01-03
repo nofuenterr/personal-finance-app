@@ -5,6 +5,7 @@ import { Categories } from '../types/categories';
 import transactions from '../data/transactions.json';
 
 export interface Transaction {
+	id: string;
 	avatar: string;
 	name: string;
 	category: Categories;
@@ -20,7 +21,12 @@ export interface TransactionState {
 export const useTransactionsStore = create<TransactionState>()(
 	persist(
 		immer((/* set, get */) => ({
-			transactions: transactions as Transaction[],
+			transactions: (transactions as Omit<Transaction, 'id'>[]).map(
+				(transaction, index) => ({
+					...transaction,
+					id: `${transaction.date}-${index}`,
+				})
+			),
 		})),
 		{
 			name: 'transactions-storage',

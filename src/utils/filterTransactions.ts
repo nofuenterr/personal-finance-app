@@ -3,7 +3,7 @@ import type { Transaction } from '../stores/transactions';
 
 type All = 'All Transactions';
 
-type Filter = All | Categories;
+export type Filter = All | Categories;
 
 export default function filterTransactions(
 	list: Transaction[],
