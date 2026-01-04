@@ -7,6 +7,7 @@ import formatPrice from '../utils/formatPrice';
 import { Progress } from 'radix-ui';
 import getPercentage from '../utils/getPercentage';
 import ScrollArea from '../components/ScrollArea';
+import BudgetsChart from '../components/BudgetsChart';
 
 export default function Budgets() {
 	const budgets = useBudgetsStore((s) => s.budgets);
@@ -59,8 +60,8 @@ export default function Budgets() {
 			<ScrollArea>
 				<div className="grid items-start gap-6 lg:grid-cols-2">
 					<div className="grid gap-8 rounded-xl bg-white px-5 py-6 md:grid-cols-2 lg:grid-cols-1">
-						<div>
-							<p>Pie Chart here</p>
+						<div className="grid place-content-center px-8 py-5">
+							<BudgetsChart budgets={budgets} />
 						</div>
 						<div className="grid gap-6">
 							<h2 className="text-xl leading-tight font-bold text-gray-900">

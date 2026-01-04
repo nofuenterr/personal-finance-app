@@ -18,6 +18,8 @@ export interface BudgetState {
 	editBudget: (budget: Budget) => void;
 	deleteBudget: (category: Categories) => void;
 	addSpent: (category: Categories, amount: number) => void;
+	getTotalSpent: () => number;
+	getTotalLimit: () => number;
 }
 
 export const useBudgetsStore = create<BudgetState>()(
@@ -44,6 +46,18 @@ export const useBudgetsStore = create<BudgetState>()(
 					const index = state.budgets.findIndex((b) => category === b.category);
 					state.budgets[index].spent = get().budgets[index].spent + amount;
 				}),
+			getTotalSpent: (): number => {
+				return get().budgets.reduce(
+					(total, budget) => (total += budget.spent),
+					0
+				);
+			},
+			getTotalLimit: (): number => {
+				return get().budgets.reduce(
+					(total, budget) => (total += budget.maximum),
+					0
+				);
+			},
 		})),
 		{
 			name: 'budgets-storage',
