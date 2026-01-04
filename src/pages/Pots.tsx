@@ -107,35 +107,63 @@ function PotCard({ pot, theme }: { pot: Pot; theme: string }) {
 						</button>
 					</DropdownMenu>
 				</div>
-				<div className="grid gap-4 py-2.5">
-					<div className="flex items-center justify-between">
-						<p className="text-sm leading-normal text-gray-500">Total Saved</p>
-						<p className="text-[2rem] leading-tight font-bold text-gray-900">
-							${formatPrice(pot.total)}
-						</p>
-					</div>
-					<div className="grid gap-3">
-						<Progress.Root
-							className="bg-beige-100 relative h-2 w-full translate-z-0 overflow-hidden rounded-sm"
-							value={progress}
-						>
-							<Progress.Indicator
-								className={
-									'h-full w-full rounded-sm transition-transform duration-660 ease-out'
-								}
+				<div className="grid sm:grid-cols-[3fr_10fr] sm:gap-4">
+					<div className="hidden place-content-center sm:grid">
+						<div className="grid justify-items-center gap-2">
+							<div
+								className="relative h-1 w-12 rounded-sm"
 								style={{
-									transform: `translateX(-${100 - progress}%)`,
 									backgroundColor: theme,
 								}}
-							/>
-						</Progress.Root>
+							></div>
+							<div
+								className="relative h-25 w-17 rounded-lg border-4"
+								style={{
+									borderColor: theme,
+								}}
+							>
+								<div
+									className="absolute bottom-0 w-full"
+									style={{
+										height: `${progress}%`,
+										backgroundColor: theme,
+									}}
+								></div>
+							</div>
+						</div>
+					</div>
+					<div className="grid gap-4 py-2.5">
 						<div className="flex items-center justify-between">
-							<p className="text-xs leading-normal font-bold text-gray-500">
-								{progress.toFixed(2) + '%'}
+							<p className="text-sm leading-normal text-gray-500">
+								Total Saved
 							</p>
-							<p className="text-xs leading-normal text-gray-500">
-								Target of ${formatPrice(pot.target)}
+							<p className="text-[2rem] leading-tight font-bold text-gray-900">
+								${formatPrice(pot.total)}
 							</p>
+						</div>
+						<div className="grid gap-3">
+							<Progress.Root
+								className="bg-beige-100 relative h-2 w-full translate-z-0 overflow-hidden rounded-sm"
+								value={progress}
+							>
+								<Progress.Indicator
+									className={
+										'h-full w-full rounded-sm transition-transform duration-660 ease-out'
+									}
+									style={{
+										transform: `translateX(-${100 - progress}%)`,
+										backgroundColor: theme,
+									}}
+								/>
+							</Progress.Root>
+							<div className="flex items-center justify-between">
+								<p className="text-xs leading-normal font-bold text-gray-500">
+									{progress.toFixed(2) + '%'}
+								</p>
+								<p className="text-xs leading-normal text-gray-500">
+									Target of ${formatPrice(pot.target)}
+								</p>
+							</div>
 						</div>
 					</div>
 				</div>
