@@ -46,11 +46,11 @@ export default function Transactions() {
 		const { page } = state as { page: number; size: number };
 		setPage(page);
 	}
-	const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
+	const totalPages = Math.ceil(sortedTransactions.length / PAGE_SIZE);
 
 	return (
 		<ContentWrapper title="Transactions" addButton={null}>
-			<div className="flex h-full flex-col gap-6 overflow-hidden rounded-lg bg-white px-5 py-6 md:p-8">
+			<div className="flex h-full flex-col gap-6 overflow-hidden rounded-lg bg-white px-5 py-6 sm:p-8">
 				<div className="flex items-center gap-6">
 					<div className="border-beige-500 relative mr-auto flex w-full max-w-80 items-center justify-between gap-4 rounded-lg border px-5 py-3 hover:border-gray-900">
 						<input

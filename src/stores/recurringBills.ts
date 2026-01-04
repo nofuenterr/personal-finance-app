@@ -7,6 +7,7 @@ import recurringBills from '../data/recurringBills.json';
 type Interval = 'Daily' | 'Weekly' | 'Monthly' | 'Yearly';
 
 export interface RecurringBill {
+	id: string;
 	avatar: string;
 	name: string;
 	interval: Interval;
@@ -32,7 +33,7 @@ export interface RecurringBillState {
 	getBillsSummary: () => BillsSummary;
 }
 
-const isDueSoon = (rbDate: string): boolean => {
+export const isDueSoon = (rbDate: string): boolean => {
 	const currentDate = new Date(Date.now());
 	const currentMonth = currentDate.getMonth();
 	const currentYear = currentDate.getFullYear();
@@ -49,7 +50,12 @@ const isDueSoon = (rbDate: string): boolean => {
 export const useRecurringBillsStore = create<RecurringBillState>()(
 	persist(
 		immer((_set, get) => ({
-			recurringBills: recurringBills as RecurringBill[],
+			recurringBills: (recurringBills as Omit<RecurringBill, 'id'>[]).map(
+				(recurringBill, index) => ({
+					...recurringBill,
+					id: `${recurringBill.date}-${index}`,
+				})
+			),
 			getBillsSummary: (): BillsSummary => {
 				const paidBills = {
 					count: 0,

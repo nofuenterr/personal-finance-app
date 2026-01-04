@@ -28,7 +28,7 @@ export function TransactionsTable({
 	const theme = useTheme(THEME);
 
 	return (
-		<div className="flex-1 overflow-y-auto">
+		<div className="grid flex-1 content-start overflow-y-auto">
 			<Table
 				data={data}
 				theme={theme}
