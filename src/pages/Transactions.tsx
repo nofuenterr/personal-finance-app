@@ -1,34 +1,27 @@
-import ContentWrapper from '../components/ContentWrapper';
-import { useTransactionsStore, type Transaction } from '../stores/transactions';
-import formatDate from '../utils/formatDate';
-import formatPrice from '../utils/formatPrice';
-import isIncome from '../utils/isIncome';
-import {
-	Table,
-	Header,
-	HeaderRow,
-	Body,
-	Row,
-	HeaderCell,
-	Cell,
-} from '@table-library/react-table-library/table';
-import { usePagination } from '@table-library/react-table-library/pagination';
-import { useTheme } from '@table-library/react-table-library/theme';
 import { useState, useMemo } from 'react';
-import { THEME } from '../theme/tableTheme';
+import ContentWrapper from '../components/ContentWrapper';
+import { Pagination } from '../components/Pagination';
+import { TransactionsTable } from '../components/TransactionsTable';
+import { usePagination } from '@table-library/react-table-library/pagination';
+import { useTransactionsStore, type Transaction } from '../stores/transactions';
+import filterTransactions from '../utils/filterTransactions';
+import type { Filter } from '../utils/filterTransactions';
+import type { Sort } from '../types/sort';
 import search from '../utils/search';
 import sortBy from '../utils/sort';
-import type { Sort } from '../types/sort';
-import type { Filter } from '../utils/filterTransactions';
-import filterTransactions from '../utils/filterTransactions';
 
 const PAGE_SIZE = 10;
+
+export interface dataType {
+	nodes: Transaction[];
+}
 
 export default function Transactions() {
 	const transactions = useTransactionsStore((s) => s.transactions);
 	const [query, setQuery] = useState<string>('');
 	const [sort, setSort] = useState<Sort>('latest');
 	const [category, setCategory] = useState<Filter>('All Transactions');
+
 	const queriedTransactions = useMemo(
 		() => search(transactions, query),
 		[query, transactions]
@@ -42,45 +35,18 @@ export default function Transactions() {
 		[sort, filteredTransactions]
 	);
 
-	const data = { nodes: sortedTransactions };
-	const theme = useTheme(THEME);
+	const data: dataType = { nodes: sortedTransactions };
 
-	const [page, setPage] = useState(0);
+	const [page, setPage] = useState<number>(0);
 	const pagination = usePagination(data, {
 		state: { page, size: PAGE_SIZE },
 		onChange: onPaginationChange,
 	});
-	function onPaginationChange(action: any, state: any) {
-		setPage(state.page);
+	function onPaginationChange(_action: unknown, state: unknown) {
+		const { page } = state as { page: number; size: number };
+		setPage(page);
 	}
-
-	const totalPages = Math.ceil(sortedTransactions.length / PAGE_SIZE);
-
-	function getPaginationRange(current: number, total: number, delta = 1) {
-		const range: (number | '...')[] = [];
-
-		const left = Math.max(1, current - delta);
-		const right = Math.min(total - 2, current + delta);
-
-		range.push(0);
-
-		if (left > 1) range.push('...');
-
-		for (let i = left; i <= right; i++) {
-			range.push(i);
-		}
-
-		if (right < total - 2) range.push('...');
-
-		if (total > 1) range.push(total - 1);
-
-		return range;
-	}
-
-	const paginationRange = useMemo(
-		() => getPaginationRange(page, totalPages),
-		[page, totalPages]
-	);
+	const totalPages = Math.ceil(transactions.length / PAGE_SIZE);
 
 	return (
 		<ContentWrapper title="Transactions" addButton={null}>
@@ -192,121 +158,9 @@ export default function Transactions() {
 					</button>
 				</div>
 
-				<div className="flex-1 overflow-y-auto">
-					<Table
-						data={data}
-						theme={theme}
-						pagination={pagination}
-						layout={{ fixedHeader: true }}
-					>
-						{(tableList) => (
-							<>
-								<Header>
-									<HeaderRow>
-										<HeaderCell>Recipient / Sender</HeaderCell>
-										<HeaderCell>Category</HeaderCell>
-										<HeaderCell>Transaction Date</HeaderCell>
-										<HeaderCell>Amount</HeaderCell>
-									</HeaderRow>
-								</Header>
-								<Body>
-									{tableList.map((item: Transaction) => (
-										<Row key={item.id} item={item}>
-											<Cell>
-												<div className="avatar-wrapper">
-													<img src={item.avatar} alt={item.name + ' avatar'} />
-												</div>
-												<span>{item.name}</span>
-											</Cell>
-											<Cell>{item.category}</Cell>
-											<Cell>{formatDate(item.date)}</Cell>
-											<Cell>
-												<span
-													className={
-														isIncome(item.amount) ? 'income' : 'expense'
-													}
-												>
-													{isIncome(item.amount) ? '+' : '-'}$
-													{formatPrice(Math.abs(item.amount))}
-												</span>
-											</Cell>
-										</Row>
-									))}
-								</Body>
-							</>
-						)}
-					</Table>
-				</div>
+				<TransactionsTable data={data} pagination={pagination} />
 
-				<div className="flex shrink-0 items-center justify-center gap-2 pt-6 sm:gap-3">
-					<button
-						onClick={() => setPage((p) => Math.max(p - 1, 0))}
-						disabled={page === 0}
-						className="group mr-auto flex size-10 cursor-pointer items-center justify-center gap-4 rounded-lg border border-gray-500 bg-white px-4 hover:bg-gray-500 sm:min-w-max"
-					>
-						<svg
-							width={6}
-							height={11}
-							viewBox="0 0 6 11"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							className="shrink-0"
-						>
-							<path
-								d="M5.147 10.854l-5-5a.5.5 0 010-.707l5-5A.5.5 0 016 .5v10a.5.5 0 01-.853.354z"
-								className="fill-gray-500 group-hover:fill-white"
-							/>
-						</svg>
-						<span className="hidden text-sm leading-normal text-gray-900 group-hover:text-white sm:inline">
-							Prev
-						</span>
-					</button>
-
-					<div className="flex flex-wrap items-center justify-center gap-2 *:grid *:size-10 *:place-content-center *:rounded-lg *:border *:border-gray-500 *:bg-white *:text-sm *:leading-normal *:text-gray-900">
-						{paginationRange.map((item, index) =>
-							item === '...' ? (
-								<span
-									key={`ellipsis-${index}`}
-									className="hover:cursor-not-allowed"
-								>
-									…
-								</span>
-							) : (
-								<button
-									key={item}
-									onClick={() => setPage(item)}
-									aria-current={page === item ? 'page' : undefined}
-									className="cursor-pointer hover:bg-gray-500 hover:text-white aria-[current]:bg-gray-900 aria-[current]:text-white"
-								>
-									{item + 1}
-								</button>
-							)
-						)}
-					</div>
-
-					<button
-						onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
-						disabled={page === totalPages - 1}
-						className="group ml-auto flex size-10 cursor-pointer items-center justify-center gap-4 rounded-lg border border-gray-500 bg-white px-4 hover:bg-gray-500 sm:min-w-max"
-					>
-						<span className="hidden text-sm leading-normal text-gray-900 group-hover:text-white sm:inline">
-							Next
-						</span>
-						<svg
-							width={6}
-							height={11}
-							viewBox="0 0 6 11"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-							className="shrink-0"
-						>
-							<path
-								d="M.854.147l5 5a.5.5 0 010 .707l-5 5A.5.5 0 010 10.5V.5A.5.5 0 01.854.147z"
-								className="fill-gray-500 group-hover:fill-white"
-							/>
-						</svg>
-					</button>
-				</div>
+				<Pagination totalPages={totalPages} page={page} setPage={setPage} />
 			</div>
 		</ContentWrapper>
 	);
