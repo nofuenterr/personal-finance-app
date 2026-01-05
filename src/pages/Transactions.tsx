@@ -158,7 +158,13 @@ export default function Transactions() {
 					</button>
 				</div>
 
-				<TransactionsTable data={data} pagination={pagination} />
+				{sortedTransactions.length > 0 ? (
+					<TransactionsTable data={data} pagination={pagination} />
+				) : (
+					<div className="grid flex-1 place-content-center text-gray-500">
+						There is currently no transactions
+					</div>
+				)}
 
 				<Pagination totalPages={totalPages} page={page} setPage={setPage} />
 			</div>
