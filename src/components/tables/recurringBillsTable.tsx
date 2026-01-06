@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import formatPrice from '../utils/formatPrice';
+import formatPrice from '../../utils/formatPrice';
 import {
 	Table,
 	Header,
@@ -11,9 +11,9 @@ import {
 } from '@table-library/react-table-library/table';
 import type { Pagination } from '@table-library/react-table-library/types/pagination';
 import { useTheme } from '@table-library/react-table-library/theme';
-import { THEME } from '../theme/recurringBillsTableTheme';
-import type { dataType } from '../pages/RecurringBills';
-import { isDueSoon, type RecurringBill } from '../stores/recurringBills';
+import { THEME } from '../../theme/recurringBillsTableTheme';
+import type { dataType } from '../../pages/RecurringBills';
+import { isDueSoon, type RecurringBill } from '../../stores/recurringBills';
 
 interface RecurringBillsTableProps {
 	data: dataType;

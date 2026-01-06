@@ -1,7 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
-import logoLarge from '../assets/icons/logo-large.svg';
-import logoSmall from '../assets/icons/logo-small.svg';
+import logoLarge from '../../assets/icons/logo-large.svg';
+import logoSmall from '../../assets/icons/logo-small.svg';
 import SidebarIcons, { SidebarIconsType } from './SidebarIcons';
 import Tooltip from './Tooltip';
 
