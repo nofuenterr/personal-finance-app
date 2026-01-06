@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import ContentWrapper from '../components/ContentWrapper';
+import ContentWrapper from '../components/ui/ContentWrapper';
 import { useBalanceStore } from '../stores/balance';
 import formatPrice from '../utils/formatPrice';
 import type { ReactNode } from 'react';
@@ -8,9 +8,9 @@ import type { Colors } from '../types/colors';
 import { type Transaction, useTransactionsStore } from '../stores/transactions';
 import isIncome from '../utils/isIncome';
 import formatDate from '../utils/formatDate';
-import ScrollArea from '../components/ScrollArea';
+import ScrollArea from '../components/ui/ScrollArea';
 import { useBudgetsStore, type Budget } from '../stores/budgets';
-import BudgetsChart from '../components/BudgetsChart';
+import BudgetsChart from '../components/ui/BudgetsChart';
 import {
 	type BillsSummary,
 	useRecurringBillsStore,

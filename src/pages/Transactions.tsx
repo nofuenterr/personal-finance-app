@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
-import ContentWrapper from '../components/ContentWrapper';
-import { Pagination } from '../components/Pagination';
-import { TransactionsTable } from '../components/TransactionsTable';
+import ContentWrapper from '../components/ui/ContentWrapper';
+import { Pagination } from '../components/tables/Pagination';
+import { TransactionsTable } from '../components/tables/TransactionsTable';
 import { usePagination } from '@table-library/react-table-library/pagination';
 import { useTransactionsStore, type Transaction } from '../stores/transactions';
 import filterTransactions from '../utils/filterTransactions';

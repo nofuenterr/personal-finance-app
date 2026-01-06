@@ -2,11 +2,11 @@ import { usePotsStore, type Pot } from '../stores/pots';
 import formatPrice from '../utils/formatPrice';
 import getPercentage from '../utils/getPercentage';
 import { Progress } from 'radix-ui';
-import ScrollArea from '../components/ScrollArea';
-import DropdownMenu from '../components/DropdownMenu';
-import Dialog from '../components/Dialog';
+import ScrollArea from '../components/ui/ScrollArea';
+import DropdownMenu from '../components/ui/DropdownMenu';
+import Dialog from '../components/dialogs/Dialog';
 import type { Colors } from '../types/colors';
-import ContentWrapper from '../components/ContentWrapper';
+import ContentWrapper from '../components/ui/ContentWrapper';
 
 export default function Pots() {
 	const pots = usePotsStore((s) => s.pots);
@@ -40,7 +40,7 @@ export default function Pots() {
 						</button>
 					}
 					title="Add New Pot"
-					description="Make changes to your profile here. Click save when you're done."
+					description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
 					buttonText="Add Pot"
 				>
 					<div>

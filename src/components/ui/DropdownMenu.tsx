@@ -1,7 +1,16 @@
 import { DropdownMenu } from 'radix-ui';
 import type { ReactNode } from 'react';
-import Dialog from './Dialog';
-import AlertDialog from './AlertDialog';
+import Dialog from '../dialogs/Dialog';
+import AlertDialog from '../dialogs/AlertDialog';
+
+interface DropdownMenuProps {
+	name: string;
+	type: 'pot' | 'budget';
+	typeCapitalized: 'Pot' | 'Budget';
+	editDescription: string;
+	editContent: ReactNode;
+	children: ReactNode;
+}
 
 export default function DropdownMenuComponent({
 	name,
@@ -10,14 +19,7 @@ export default function DropdownMenuComponent({
 	editDescription,
 	editContent,
 	children,
-}: {
-	name: string;
-	type: 'pot' | 'budget';
-	typeCapitalized: 'Pot' | 'Budget';
-	editDescription: string;
-	editContent: ReactNode;
-	children: ReactNode;
-}) {
+}: DropdownMenuProps) {
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>

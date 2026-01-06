@@ -1,13 +1,13 @@
-import ContentWrapper from '../components/ContentWrapper';
-import Dialog from '../components/Dialog';
-import DropdownMenu from '../components/DropdownMenu';
+import ContentWrapper from '../components/ui/ContentWrapper';
+import Dialog from '../components/dialogs/Dialog';
+import DropdownMenu from '../components/ui/DropdownMenu';
 import { useBudgetsStore, type Budget } from '../stores/budgets';
 import type { Colors } from '../types/colors';
 import formatPrice from '../utils/formatPrice';
 import { Progress } from 'radix-ui';
 import getPercentage from '../utils/getPercentage';
-import ScrollArea from '../components/ScrollArea';
-import BudgetsChart from '../components/BudgetsChart';
+import ScrollArea from '../components/ui/ScrollArea';
+import BudgetsChart from '../components/ui/BudgetsChart';
 
 export default function Budgets() {
 	const budgets = useBudgetsStore((s) => s.budgets);

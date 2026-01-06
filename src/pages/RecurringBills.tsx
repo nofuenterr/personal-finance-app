@@ -1,17 +1,17 @@
-import ContentWrapper from '../components/ContentWrapper';
+import ContentWrapper from '../components/ui/ContentWrapper';
 import { usePagination } from '@table-library/react-table-library/pagination';
 import { useMemo, useState } from 'react';
-import { RecurringBillsTable } from '../components/recurringBillsTable';
+import { RecurringBillsTable } from '../components/tables/recurringBillsTable';
 import {
 	useRecurringBillsStore,
 	type RecurringBill,
 } from '../stores/recurringBills';
 import formatPrice from '../utils/formatPrice';
-import { Pagination } from '../components/Pagination';
+import { Pagination } from '../components/tables/Pagination';
 import type { Sort } from '../types/sort';
 import search from '../utils/search';
 import sortBy from '../utils/sort';
-import ScrollArea from '../components/ScrollArea';
+import ScrollArea from '../components/ui/ScrollArea';
 
 const PAGE_SIZE = 10;
 

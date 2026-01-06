@@ -1,8 +1,8 @@
 import { Pie, PieChart } from 'recharts';
 import { RechartsDevtools } from '@recharts/devtools';
-import { useBudgetsStore, type Budget } from '../stores/budgets';
-import formatPrice from '../utils/formatPrice';
-import type { Categories } from '../types/categories';
+import { useBudgetsStore, type Budget } from '../../stores/budgets';
+import formatPrice from '../../utils/formatPrice';
+import type { Categories } from '../../types/categories';
 
 /* const data = [
   { name: 'Group A', value: 400, fill: '#0088FE' },

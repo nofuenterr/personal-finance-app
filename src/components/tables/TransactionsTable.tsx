@@ -1,7 +1,7 @@
-import { type Transaction } from '../stores/transactions';
-import formatDate from '../utils/formatDate';
-import formatPrice from '../utils/formatPrice';
-import isIncome from '../utils/isIncome';
+import { type Transaction } from '../../stores/transactions';
+import formatDate from '../../utils/formatDate';
+import formatPrice from '../../utils/formatPrice';
+import isIncome from '../../utils/isIncome';
 import {
 	Table,
 	Header,
@@ -13,8 +13,8 @@ import {
 } from '@table-library/react-table-library/table';
 import type { Pagination } from '@table-library/react-table-library/types/pagination';
 import { useTheme } from '@table-library/react-table-library/theme';
-import { THEME } from '../theme/transactionsTableTheme';
-import type { dataType } from '../pages/Transactions';
+import { THEME } from '../../theme/transactionsTableTheme';
+import type { dataType } from '../../pages/Transactions';
 
 interface TransactionsTableProps {
 	data: dataType;
