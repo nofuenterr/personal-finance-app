@@ -2,22 +2,24 @@ import { Dialog } from 'radix-ui';
 import type { ReactNode } from 'react';
 
 interface DialogProps {
-	trigger: ReactNode;
+	open?: boolean;
+	onOpenChange?: (open: boolean) => void;
+	trigger?: ReactNode;
 	title: string;
 	description: string;
-	buttonText: string;
 	children: ReactNode;
 }
 
 export default function DialogComponent({
+	open,
+	onOpenChange,
 	trigger,
 	title,
 	description,
-	buttonText,
 	children,
 }: DialogProps) {
 	return (
-		<Dialog.Root>
+		<Dialog.Root open={open} onOpenChange={onOpenChange}>
 			<Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 transition-opacity duration-150 ease-out data-[state=open]:opacity-100" />
@@ -49,11 +51,6 @@ export default function DialogComponent({
 						{description}
 					</Dialog.Description>
 					{children}
-					<Dialog.Close asChild>
-						<button className="w-full cursor-pointer rounded-lg bg-gray-900 px-6 py-4 text-sm leading-normal font-bold text-white hover:bg-gray-500">
-							{buttonText}
-						</button>
-					</Dialog.Close>
 				</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog.Root>

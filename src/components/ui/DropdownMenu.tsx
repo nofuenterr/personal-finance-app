@@ -1,24 +1,26 @@
 import { DropdownMenu } from 'radix-ui';
-import type { ReactNode } from 'react';
-import Dialog from '../dialogs/Dialog';
+import type { Dispatch, ReactNode } from 'react';
 import AlertDialog from '../dialogs/AlertDialog';
+import type { PotDialogAction } from '../../pages/Pots';
+import { type Pot } from '../../stores/pots';
 
 interface DropdownMenuProps {
 	name: string;
 	type: 'pot' | 'budget';
 	typeCapitalized: 'Pot' | 'Budget';
-	editDescription: string;
-	editContent: ReactNode;
 	children: ReactNode;
+
+	setDialog: Dispatch<React.SetStateAction<PotDialogAction>>;
+	pot: Pot;
 }
 
 export default function DropdownMenuComponent({
 	name,
 	type,
 	typeCapitalized,
-	editDescription,
-	editContent,
 	children,
+	setDialog,
+	pot,
 }: DropdownMenuProps) {
 	return (
 		<DropdownMenu.Root>
@@ -30,24 +32,18 @@ export default function DropdownMenuComponent({
 					sideOffset={5}
 				>
 					<DropdownMenu.Item disabled>
-						<Dialog
-							trigger={
-								<button className="cursor-pointer text-sm leading-normal text-gray-900">
-									Edit {typeCapitalized}
-								</button>
-							}
-							title={`Edit ${typeCapitalized}`}
-							description={editDescription}
-							buttonText="Save Changes"
+						<button
+							onClick={() => setDialog({ type: 'edit', pot })}
+							className="cursor-pointer text-sm leading-normal text-gray-900"
 						>
-							{editContent}
-						</Dialog>
+							Edit {typeCapitalized}
+						</button>
 					</DropdownMenu.Item>
 
 					<DropdownMenu.Separator className="h-px bg-gray-100" />
 
 					<DropdownMenu.Item disabled>
-						<AlertDialog name={name} type={type}>
+						<AlertDialog name={name} type={type} id={pot.id}>
 							<button className="text-red cursor-pointer text-sm leading-normal">
 								Delete {typeCapitalized}
 							</button>

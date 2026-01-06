@@ -1,17 +1,29 @@
 import { AlertDialog } from 'radix-ui';
 import type { ReactNode } from 'react';
+import { usePotsStore } from '../../stores/pots';
+import { useBalanceStore } from '../../stores/balance';
 
 interface AlertDialogProps {
 	name: string;
 	type: string;
+	id: string;
 	children: ReactNode;
 }
 
 export default function AlertDialogComponent({
 	name,
 	type,
+	id,
 	children,
 }: AlertDialogProps) {
+	const deletePot = usePotsStore((s) => s.deletePot);
+	const addCurrent = useBalanceStore((s) => s.addCurrent);
+
+	const handleDelete = () => {
+		const refunded = deletePot(id);
+		addCurrent(refunded);
+	};
+
 	return (
 		<AlertDialog.Root>
 			<AlertDialog.Trigger asChild>{children}</AlertDialog.Trigger>
@@ -44,7 +56,10 @@ export default function AlertDialogComponent({
 						reversed, and all the data inside it will be removed forever.
 					</AlertDialog.Description>
 					<AlertDialog.Cancel asChild>
-						<button className="bg-red cursor-pointer rounded-lg px-6 py-4 text-sm leading-normal font-bold text-white hover:opacity-80">
+						<button
+							onClick={handleDelete}
+							className="bg-red cursor-pointer rounded-lg px-6 py-4 text-sm leading-normal font-bold text-white hover:opacity-80"
+						>
 							Yes, Confirm Deletion
 						</button>
 					</AlertDialog.Cancel>
