@@ -7,7 +7,8 @@ export interface BalanceState {
 	current: number;
 	income: number;
 	expenses: number;
-	editCurrent: (amount: number) => void;
+	addCurrent: (amount: number) => void;
+	subtractCurrent: (amount: number) => void;
 	addIncome: (amount: number) => void;
 	addExpenses: (amount: number) => void;
 }
@@ -18,10 +19,8 @@ export const useBalanceStore = create<BalanceState>()(
 			current: balance.current,
 			income: balance.income,
 			expenses: balance.expenses,
-			editCurrent: (amount: number) =>
-				set((state) => {
-					state.current = get().current + amount;
-				}),
+			addCurrent: (amount) => set({ current: get().current + amount }),
+			subtractCurrent: (amount) => set({ current: get().current - amount }),
 			addIncome: (amount: number) =>
 				set((state) => {
 					state.income = get().income + amount;
