@@ -5,6 +5,7 @@ import { Colors } from '../types/colors';
 import pots from '../data/pots.json';
 
 export interface Pot {
+	id: string;
 	name: string;
 	target: number;
 	total: number;
@@ -13,39 +14,53 @@ export interface Pot {
 
 export interface PotState {
 	pots: Pot[];
-	addPot: (pot: Pot) => void;
-	editPot: (pot: Pot) => void;
-	deletePot: (name: string) => void;
-	deposit: (name: string, amount: number) => void;
-	withdraw: (name: string, amount: number) => void;
+	addPot: (pot: Omit<Pot, 'id' | 'total'>) => void;
+	editPot: (id: string, updates: Partial<Omit<Pot, 'id'>>) => void;
+	deletePot: (id: string) => number;
+	deposit: (id: string, amount: number) => void;
+	withdraw: (id: string, amount: number) => void;
 }
 
 export const usePotsStore = create<PotState>()(
 	persist(
 		immer((set, get) => ({
-			pots: pots as Pot[],
-			addPot: (pot: Pot) =>
+			pots: (pots as Omit<Pot, 'id'>[]).map((pots) => ({
+				...pots,
+				id: crypto.randomUUID(),
+			})),
+			addPot: (pot) =>
 				set((state) => {
-					state.pots.push(pot);
+					state.pots.push({
+						id: crypto.randomUUID(),
+						total: 0,
+						...pot,
+					});
 				}),
-			editPot: (pot: Pot) =>
+			editPot: (id, updates) =>
 				set((state) => {
-					const index = state.pots.findIndex((p) => pot.name === p.name);
-					state.pots[index] = pot;
+					const pot = state.pots.find((p) => p.id === id);
+					if (pot) Object.assign(pot, updates);
 				}),
-			deletePot: (name: string) =>
+			deletePot: (id) => {
+				const pot = get().pots.find((p) => p.id === id);
+				if (!pot) return 0;
+
 				set((state) => {
-					state.pots = get().pots.filter((p) => name !== p.name);
+					state.pots = state.pots.filter((p) => p.id !== id);
+				});
+
+				return pot.total;
+			},
+			deposit: (id, amount) =>
+				set((state) => {
+					const pot = state.pots.find((p) => p.id === id);
+					if (pot) pot.total += amount;
 				}),
-			deposit: (name: string, amount: number) =>
+
+			withdraw: (id, amount) =>
 				set((state) => {
-					const index = state.pots.findIndex((p) => name === p.name);
-					state.pots[index].total = get().pots[index].total + amount;
-				}),
-			withdraw: (name: string, amount: number) =>
-				set((state) => {
-					const index = state.pots.findIndex((p) => name === p.name);
-					state.pots[index].total = get().pots[index].total - amount;
+					const pot = state.pots.find((p) => p.id === id);
+					if (pot) pot.total -= amount;
 				}),
 		})),
 		{
