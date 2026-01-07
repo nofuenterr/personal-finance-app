@@ -4,7 +4,6 @@ import type { ReactNode } from 'react';
 interface DialogProps {
 	open?: boolean;
 	onOpenChange?: (open: boolean) => void;
-	trigger?: ReactNode;
 	title: string;
 	description: string;
 	children: ReactNode;
@@ -13,14 +12,12 @@ interface DialogProps {
 export default function DialogComponent({
 	open,
 	onOpenChange,
-	trigger,
 	title,
 	description,
 	children,
 }: DialogProps) {
 	return (
 		<Dialog.Root open={open} onOpenChange={onOpenChange}>
-			<Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="fixed inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 transition-opacity duration-150 ease-out data-[state=open]:opacity-100" />
 				<Dialog.Content className="fixed inset-0 m-auto grid h-max w-[90vw] max-w-140 gap-5 rounded-xl bg-white px-5 py-6 drop-shadow-[0_8px_24px_rgba(0,0,0,0.05)] focus:outline-none focus-visible:outline-none md:p-8">

@@ -1,32 +1,22 @@
 import { AlertDialog } from 'radix-ui';
-import type { ReactNode } from 'react';
-import { usePotsStore } from '../../stores/pots';
-import { useBalanceStore } from '../../stores/balance';
 
 interface AlertDialogProps {
+	open?: boolean;
+	onOpenChange?: (open: boolean) => void;
 	name: string;
 	type: string;
-	id: string;
-	children: ReactNode;
+	handleDelete: () => void;
 }
 
 export default function AlertDialogComponent({
+	open,
+	onOpenChange,
 	name,
 	type,
-	id,
-	children,
+	handleDelete,
 }: AlertDialogProps) {
-	const deletePot = usePotsStore((s) => s.deletePot);
-	const addCurrent = useBalanceStore((s) => s.addCurrent);
-
-	const handleDelete = () => {
-		const refunded = deletePot(id);
-		addCurrent(refunded);
-	};
-
 	return (
-		<AlertDialog.Root>
-			<AlertDialog.Trigger asChild>{children}</AlertDialog.Trigger>
+		<AlertDialog.Root open={open} onOpenChange={onOpenChange}>
 			<AlertDialog.Portal>
 				<AlertDialog.Overlay className="fixed inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 transition-opacity duration-150 ease-out data-[state=open]:opacity-100" />
 				<AlertDialog.Content className="fixed inset-0 m-auto grid h-max w-[90vw] max-w-140 gap-5 rounded-xl bg-white px-5 py-6 drop-shadow-[0_8px_24px_rgba(0,0,0,0.05)] focus:outline-none focus-visible:outline-none md:p-8">

@@ -11,18 +11,25 @@ import { useState, type Dispatch } from 'react';
 import { PotForm } from '../components/PotForm';
 import { useBalanceStore } from '../stores/balance';
 import { TransactionForm } from '../components/PotTransactionForm';
+import AlertDialog from '../components/dialogs/AlertDialog';
 
 export type PotDialogAction =
 	| { type: 'add' }
 	| { type: 'edit'; pot: Pot }
 	| { type: 'deposit'; pot: Pot }
 	| { type: 'withdraw'; pot: Pot }
+	| { type: 'delete'; pot: Pot }
 	| null;
 
 export default function Pots() {
 	const pots = usePotsStore((s) => s.pots);
 	const addPot = usePotsStore((s) => s.addPot);
 	const editPot = usePotsStore((s) => s.editPot);
+	const deletePot = usePotsStore((s) => s.deletePot);
+	const deposit = usePotsStore((s) => s.deposit);
+	const subtractCurrent = useBalanceStore((s) => s.subtractCurrent);
+	const withdraw = usePotsStore((s) => s.withdraw);
+	const addCurrent = useBalanceStore((s) => s.addCurrent);
 
 	const [dialog, setDialog] = useState<PotDialogAction>(null);
 
@@ -55,6 +62,28 @@ export default function Pots() {
 	const handleEdit = (data: Partial<Omit<Pot, 'id'>>): void => {
 		if (dialog?.type === 'edit') editPot(dialog.pot.id, data);
 		setDialog(null);
+		document.dispatchEvent(new KeyboardEvent('keydonm wn', { key: 'Escape' }));
+	};
+
+	const handleDelete = () => {
+		if (dialog?.type === 'delete') {
+			const refunded = deletePot(dialog.pot.id);
+			addCurrent(refunded);
+			setDialog(null);
+		}
+	};
+
+	const handleDeposit = (amount: number): void => {
+		if (dialog?.type === 'deposit') deposit(dialog.pot.id, amount);
+		setDialog(null);
+		subtractCurrent(amount);
+		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+	};
+
+	const handleWithdrawal = (amount: number): void => {
+		if (dialog?.type === 'withdraw') withdraw(dialog.pot.id, amount);
+		setDialog(null);
+		addCurrent(amount);
 		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 	};
 
@@ -62,24 +91,12 @@ export default function Pots() {
 		<ContentWrapper
 			title="Pots"
 			addButton={
-				<Dialog
-					trigger={
-						<button
-							onClick={() => setDialog({ type: 'add' })}
-							className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500"
-						>
-							+ Add New Pot
-						</button>
-					}
-					title="Add New Pot"
-					description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
+				<button
+					onClick={() => setDialog({ type: 'add' })}
+					className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500"
 				>
-					<PotForm
-						dialog={dialog}
-						usedColors={usedColors}
-						onSubmit={(data) => handleAdd(data)}
-					/>
-				</Dialog>
+					+ Add New Pot
+				</button>
 			}
 		>
 			<ScrollArea>
@@ -90,13 +107,28 @@ export default function Pots() {
 								key={pot.name}
 								pot={pot}
 								theme={THEME_COLORS[pot.theme]}
-								dialog={dialog}
 								setDialog={setDialog}
 							/>
 						);
 					})}
 				</ul>
 			</ScrollArea>
+
+			{dialog?.type === 'add' && (
+				<Dialog
+					open={dialog?.type === 'add'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					title="Add New Pot"
+					description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
+				>
+					<PotForm
+						dialog={dialog}
+						usedColors={usedColors}
+						onSubmit={(data) => handleAdd(data)}
+					/>
+				</Dialog>
+			)}
+
 			{dialog?.type === 'edit' && (
 				<Dialog
 					open={dialog?.type === 'edit'}
@@ -104,15 +136,53 @@ export default function Pots() {
 					title="Edit Pot"
 					description="If your saving targets change, feel free to update your pots."
 				>
-					{dialog?.type === 'edit' ? (
-						<PotForm
-							initial={dialog.pot}
-							editingId={dialog.pot.id}
-							usedColors={usedColors}
-							onSubmit={(data) => handleEdit(data)}
-							dialog={dialog}
-						/>
-					) : null}
+					<PotForm
+						initial={dialog.pot}
+						editingId={dialog.pot.id}
+						usedColors={usedColors}
+						onSubmit={(data) => handleEdit(data)}
+						dialog={dialog}
+					/>
+				</Dialog>
+			)}
+
+			{dialog?.type === 'delete' && (
+				<AlertDialog
+					open={dialog?.type === 'delete'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					name={dialog.pot.name}
+					type="pot"
+					handleDelete={handleDelete}
+				/>
+			)}
+
+			{dialog?.type === 'deposit' && (
+				<Dialog
+					open={dialog?.type === 'deposit'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					title="Add New Pot"
+					description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
+				>
+					<TransactionForm
+						dialog={dialog}
+						max={dialog.pot.total}
+						onSubmit={(amount) => handleDeposit(amount)}
+					/>
+				</Dialog>
+			)}
+
+			{dialog?.type === 'withdraw' && (
+				<Dialog
+					open={dialog?.type === 'withdraw'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					title={`Withdraw from '${dialog.pot.name}'`}
+					description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
+				>
+					<TransactionForm
+						dialog={dialog}
+						max={dialog.pot.total}
+						onSubmit={(amount) => handleWithdrawal(amount)}
+					/>
 				</Dialog>
 			)}
 		</ContentWrapper>
@@ -122,30 +192,11 @@ export default function Pots() {
 interface PotCardProps {
 	pot: Pot;
 	theme: string;
-	dialog: PotDialogAction;
 	setDialog: Dispatch<React.SetStateAction<PotDialogAction>>;
 }
 
-function PotCard({ pot, theme, dialog, setDialog }: PotCardProps) {
+function PotCard({ pot, theme, setDialog }: PotCardProps) {
 	const progress = getPercentage(pot.total, pot.target);
-	const withdraw = usePotsStore((s) => s.withdraw);
-	const deposit = usePotsStore((s) => s.deposit);
-	const addCurrent = useBalanceStore((s) => s.addCurrent);
-	const subtractCurrent = useBalanceStore((s) => s.subtractCurrent);
-
-	const handleDeposit = (amount: number): void => {
-		deposit(pot.id, amount);
-		setDialog(null);
-		subtractCurrent(amount);
-		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-	};
-
-	const handleWithdrawal = (amount: number): void => {
-		withdraw(pot.id, amount);
-		setDialog(null);
-		addCurrent(amount);
-		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
-	};
 
 	return (
 		<li className="rounded-xl bg-white px-5 pt-6 pb-9.5 drop-shadow-[0_8px_24px_rgba(0,0,0,0.0.5)]">
@@ -160,13 +211,7 @@ function PotCard({ pot, theme, dialog, setDialog }: PotCardProps) {
 							{pot.name}
 						</h2>
 					</div>
-					<DropdownMenu
-						name={pot.name}
-						type="pot"
-						typeCapitalized="Pot"
-						pot={pot}
-						setDialog={setDialog}
-					>
+					<DropdownMenu item="Pot" pot={pot} setDialog={setDialog}>
 						<button className="cursor-pointer">
 							<svg
 								width="15"
@@ -246,42 +291,18 @@ function PotCard({ pot, theme, dialog, setDialog }: PotCardProps) {
 					</div>
 				</div>
 				<div className="grid grid-cols-2 gap-4">
-					<Dialog
-						trigger={
-							<button
-								onClick={() => setDialog({ type: 'deposit', pot })}
-								className="bg-beige-100 border-beige-100 hover:border-beige-500 cursor-pointer rounded-lg border p-4 text-sm leading-normal font-bold text-gray-900 hover:bg-white"
-							>
-								+ Add Money
-							</button>
-						}
-						title="Add New Pot"
-						description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
+					<button
+						onClick={() => setDialog({ type: 'deposit', pot })}
+						className="bg-beige-100 border-beige-100 hover:border-beige-500 cursor-pointer rounded-lg border p-4 text-sm leading-normal font-bold text-gray-900 hover:bg-white"
 					>
-						<TransactionForm
-							dialog={dialog}
-							max={pot.total}
-							onSubmit={(amount) => handleDeposit(amount)}
-						/>
-					</Dialog>
-					<Dialog
-						trigger={
-							<button
-								onClick={() => setDialog({ type: 'withdraw', pot })}
-								className="bg-beige-100 border-beige-100 hover:border-beige-500 cursor-pointer rounded-lg border p-4 text-sm leading-normal font-bold text-gray-900 hover:bg-white"
-							>
-								+ Withdraw
-							</button>
-						}
-						title={`Withdraw from '${pot.name}'`}
-						description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
+						+ Add Money
+					</button>
+					<button
+						onClick={() => setDialog({ type: 'withdraw', pot })}
+						className="bg-beige-100 border-beige-100 hover:border-beige-500 cursor-pointer rounded-lg border p-4 text-sm leading-normal font-bold text-gray-900 hover:bg-white"
 					>
-						<TransactionForm
-							dialog={dialog}
-							max={pot.total}
-							onSubmit={(amount) => handleWithdrawal(amount)}
-						/>
-					</Dialog>
+						+ Withdraw
+					</button>
 				</div>
 			</div>
 		</li>
