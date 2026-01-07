@@ -32,8 +32,8 @@ export function TransactionForm({
 	let target: string = '$0.00';
 
 	if (dialog?.type === 'deposit' || dialog?.type === 'withdraw') {
-		originalProgress = getPercentage(dialog.pot.total, dialog.pot.target);
-		newProgress = getPercentage(newAmount, dialog.pot.target);
+		originalProgress = getPercentage(dialog.object.total, dialog.object.target);
+		newProgress = getPercentage(newAmount, dialog.object.target);
 
 		if (dialog.type === 'deposit') {
 			addedProgress = newProgress - originalProgress;
@@ -42,10 +42,10 @@ export function TransactionForm({
 		if (dialog.type === 'withdraw') {
 			const extraProgress = originalProgress > 100 ? originalProgress - 100 : 0;
 			subtractedProgress =
-				getPercentage(amount, dialog.pot.target) - extraProgress;
+				getPercentage(amount, dialog.object.target) - extraProgress;
 		}
 
-		target = `$${formatPrice(dialog.pot.target)}`;
+		target = `$${formatPrice(dialog.object.target)}`;
 	}
 
 	if (amount > max && dialog?.type === 'withdraw') setValue('amount', max);

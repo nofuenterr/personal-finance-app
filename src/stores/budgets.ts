@@ -4,8 +4,10 @@ import { persist } from 'zustand/middleware';
 import { Categories } from '../types/categories';
 import { Colors } from '../types/colors';
 import budgets from '../data/budgets.json';
+import { useTransactionsStore } from './transactions';
 
 export interface Budget {
+	id: string;
 	category: Categories;
 	maximum: number;
 	theme: Colors;
@@ -14,10 +16,10 @@ export interface Budget {
 
 export interface BudgetState {
 	budgets: Budget[];
-	addBudget: (budget: Budget) => void;
-	editBudget: (budget: Budget) => void;
-	deleteBudget: (category: Categories) => void;
-	addSpent: (category: Categories, amount: number) => void;
+	addBudget: (budget: Omit<Budget, 'id' | 'spent'>) => void;
+	editBudget: (id: string, updates: Partial<Omit<Budget, 'id'>>) => void;
+	deleteBudget: (id: string) => void;
+	addSpent: (id: string, amount: number) => void;
 	getTotalSpent: () => number;
 	getTotalLimit: () => number;
 }
@@ -25,25 +27,49 @@ export interface BudgetState {
 export const useBudgetsStore = create<BudgetState>()(
 	persist(
 		immer((set, get) => ({
-			budgets: budgets as Budget[],
-			addBudget: (budget: Budget) =>
+			budgets: (budgets as Omit<Budget, 'id'>[]).map((budget) => {
+				const spent = useTransactionsStore
+					.getState()
+					.transactions.reduce((total, tr) => {
+						if (tr.category === budget.category && tr.amount < 0)
+							return (total += Math.abs(tr.amount));
+						return total;
+					}, 0);
+				return {
+					...budget,
+					id: crypto.randomUUID(),
+					spent,
+				};
+			}),
+			addBudget: (budget: Omit<Budget, 'id' | 'spent'>) =>
 				set((state) => {
-					state.budgets.push(budget);
+					const spent = useTransactionsStore
+						.getState()
+						.transactions.reduce((total, tr) => {
+							if (tr.category === budget.category && tr.amount < 0)
+								return (total += Math.abs(tr.amount));
+							return total;
+						}, 0);
+
+					state.budgets.push({
+						id: crypto.randomUUID(),
+						spent,
+						...budget,
+					});
 				}),
-			editBudget: (budget: Budget) =>
+			editBudget: (id: string, updates: Partial<Omit<Budget, 'id'>>) =>
 				set((state) => {
-					const index = state.budgets.findIndex(
-						(b) => budget.category === b.category
-					);
-					state.budgets[index] = budget;
+					const budget = state.budgets.find((b) => b.id === id);
+					if (budget) Object.assign(budget, updates);
 				}),
-			deleteBudget: (category: Categories) =>
+			deleteBudget: (id: string) => {
 				set((state) => {
-					state.budgets = get().budgets.filter((b) => category !== b.category);
-				}),
-			addSpent: (category: Categories, amount: number) =>
+					state.budgets = get().budgets.filter((b) => b.id !== id);
+				});
+			},
+			addSpent: (id: string, amount: number) =>
 				set((state) => {
-					const index = state.budgets.findIndex((b) => category === b.category);
+					const index = state.budgets.findIndex((b) => id === b.id);
 					state.budgets[index].spent = get().budgets[index].spent + amount;
 				}),
 			getTotalSpent: (): number => {

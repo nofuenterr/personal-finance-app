@@ -8,9 +8,26 @@ import { Progress } from 'radix-ui';
 import getPercentage from '../utils/getPercentage';
 import ScrollArea from '../components/ui/ScrollArea';
 import BudgetsChart from '../components/ui/BudgetsChart';
+import { useState, type Dispatch } from 'react';
+import { BudgetForm } from '../components/BudgetForm';
+import AlertDialog from '../components/dialogs/AlertDialog';
+
+export type BudgetDialogAction =
+	| { type: 'add' }
+	| { type: 'edit'; object: Budget }
+	| { type: 'delete'; object: Budget }
+	| null;
 
 export default function Budgets() {
 	const budgets = useBudgetsStore((s) => s.budgets);
+	const addBudget = useBudgetsStore((s) => s.addBudget);
+	const editBudget = useBudgetsStore((s) => s.editBudget);
+	const deleteBudget = useBudgetsStore((s) => s.deleteBudget);
+
+	const [dialog, setDialog] = useState<BudgetDialogAction>(null);
+
+	const usedCategories = budgets.map((b) => b.category);
+	const usedColors = budgets.map((b) => b.theme);
 
 	const THEME_COLORS: Record<Colors, string> = {
 		green: 'var(--color-green)',
@@ -37,24 +54,33 @@ export default function Budgets() {
 		return `$${formatPrice(adjustedRemaining)}`;
 	};
 
+	const handleAdd = (data: Omit<Budget, 'id' | 'spent'>): void => {
+		addBudget(data);
+		setDialog(null);
+		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+	};
+
+	const handleEdit = (data: Partial<Omit<Budget, 'id'>>): void => {
+		if (dialog?.type === 'edit') editBudget(dialog.object.id, data);
+		setDialog(null);
+		document.dispatchEvent(new KeyboardEvent('keydonm wn', { key: 'Escape' }));
+	};
+
+	const handleDelete = () => {
+		if (dialog?.type === 'delete') deleteBudget(dialog.object.id);
+		setDialog(null);
+	};
+
 	return (
 		<ContentWrapper
 			title="Budgets"
 			addButton={
-				<Dialog
-					trigger={
-						<button className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500">
-							+ Add New Budget
-						</button>
-					}
-					title="Add New Budget"
-					description="Choose a category to set a spending budget. These categories can help you monitor spending."
-					buttonText="Add Budget"
+				<button
+					onClick={() => setDialog({ type: 'add' })}
+					className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500"
 				>
-					<div>
-						<form action=""></form>
-					</div>
-				</Dialog>
+					+ Add New Budget
+				</button>
 			}
 		>
 			<ScrollArea>
@@ -106,6 +132,7 @@ export default function Budgets() {
 										budget={budget}
 										theme={THEME_COLORS[budget.theme]}
 										getRemainingBudget={getRemainingBudget}
+										setDialog={setDialog}
 									/>
 								);
 							})}
@@ -113,6 +140,50 @@ export default function Budgets() {
 					</div>
 				</div>
 			</ScrollArea>
+
+			{dialog?.type === 'add' && (
+				<Dialog
+					open={dialog?.type === 'add'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					title="Add New Budget"
+					description="Choose a category to set a spending budget. These categories can help you monitor spending."
+				>
+					<BudgetForm
+						dialog={dialog}
+						usedCategories={usedCategories}
+						usedColors={usedColors}
+						onSubmit={(data) => handleAdd(data)}
+					/>
+				</Dialog>
+			)}
+
+			{dialog?.type === 'edit' && (
+				<Dialog
+					open={dialog?.type === 'edit'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					title="Edit Budget"
+					description="As your budgets change, feel free to update your spending limits."
+				>
+					<BudgetForm
+						initial={dialog.object}
+						editingId={dialog.object.id}
+						usedCategories={usedCategories}
+						usedColors={usedColors}
+						onSubmit={(data) => handleEdit(data)}
+						dialog={dialog}
+					/>
+				</Dialog>
+			)}
+
+			{dialog?.type === 'delete' && (
+				<AlertDialog
+					open={dialog?.type === 'delete'}
+					onOpenChange={(open: boolean) => !open && setDialog(null)}
+					name={dialog.object.category}
+					type="budget"
+					handleDelete={handleDelete}
+				/>
+			)}
 		</ContentWrapper>
 	);
 }
@@ -121,9 +192,15 @@ interface BudgetCardProps {
 	budget: Budget;
 	theme: string;
 	getRemainingBudget: (maximum: number, spent: number) => string;
+	setDialog: Dispatch<React.SetStateAction<BudgetDialogAction>>;
 }
 
-function BudgetCard({ budget, theme, getRemainingBudget }: BudgetCardProps) {
+function BudgetCard({
+	budget,
+	theme,
+	getRemainingBudget,
+	setDialog,
+}: BudgetCardProps) {
 	const initial = getPercentage(budget.spent, budget.maximum);
 	const progress = initial > 100 ? 100 : initial;
 
@@ -140,13 +217,7 @@ function BudgetCard({ budget, theme, getRemainingBudget }: BudgetCardProps) {
 							{budget.category}
 						</h2>
 					</div>
-					<DropdownMenu
-						name={budget.category}
-						type="budget"
-						typeCapitalized="Budget"
-						editDescription="As your budgets change, feel free to update your spending limits."
-						editContent={<div></div>}
-					>
+					<DropdownMenu item="Budget" setDialog={setDialog} object={budget}>
 						<button className="cursor-pointer">
 							<svg
 								width="15"

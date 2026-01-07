@@ -2,19 +2,23 @@ import { DropdownMenu } from 'radix-ui';
 import type { Dispatch, ReactNode } from 'react';
 import type { PotDialogAction } from '../../pages/Pots';
 import { type Pot } from '../../stores/pots';
+import type { Budget } from '../../stores/budgets';
+import type { BudgetDialogAction } from '../../pages/Budgets';
 
 interface DropdownMenuProps {
 	item: 'Pot' | 'Budget';
 	children: ReactNode;
-	setDialog: Dispatch<React.SetStateAction<PotDialogAction>>;
-	pot: Pot;
+	setDialog:
+		| Dispatch<React.SetStateAction<PotDialogAction>>
+		| Dispatch<React.SetStateAction<BudgetDialogAction>>;
+	object: Pot | Budget;
 }
 
 export default function DropdownMenuComponent({
 	item,
 	children,
 	setDialog,
-	pot,
+	object,
 }: DropdownMenuProps) {
 	return (
 		<DropdownMenu.Root>
@@ -27,7 +31,7 @@ export default function DropdownMenuComponent({
 				>
 					<DropdownMenu.Item disabled>
 						<button
-							onClick={() => setDialog({ type: 'edit', pot })}
+							onClick={() => setDialog({ type: 'edit', object })}
 							className="cursor-pointer text-sm leading-normal text-gray-900"
 						>
 							Edit {item}
@@ -38,7 +42,7 @@ export default function DropdownMenuComponent({
 
 					<DropdownMenu.Item disabled>
 						<button
-							onClick={() => setDialog({ type: 'delete', pot })}
+							onClick={() => setDialog({ type: 'delete', object })}
 							className="text-red cursor-pointer text-sm leading-normal"
 						>
 							Delete {item}
