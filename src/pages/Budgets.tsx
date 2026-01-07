@@ -11,6 +11,10 @@ import BudgetsChart from '../components/ui/BudgetsChart';
 import { useState, type Dispatch } from 'react';
 import { BudgetForm } from '../components/BudgetForm';
 import AlertDialog from '../components/dialogs/AlertDialog';
+import { Link } from 'react-router-dom';
+import { getLatestSpending } from '../utils/getLatestSpending';
+import { useTransactionsStore, type Transaction } from '../stores/transactions';
+import formatDate from '../utils/formatDate';
 
 export type BudgetDialogAction =
 	| { type: 'add' }
@@ -23,6 +27,7 @@ export default function Budgets() {
 	const addBudget = useBudgetsStore((s) => s.addBudget);
 	const editBudget = useBudgetsStore((s) => s.editBudget);
 	const deleteBudget = useBudgetsStore((s) => s.deleteBudget);
+	const transactions = useTransactionsStore((s) => s.transactions);
 
 	const [dialog, setDialog] = useState<BudgetDialogAction>(null);
 
@@ -133,6 +138,10 @@ export default function Budgets() {
 										theme={THEME_COLORS[budget.theme]}
 										getRemainingBudget={getRemainingBudget}
 										setDialog={setDialog}
+										latestSpending={getLatestSpending(
+											transactions,
+											budget.category
+										)}
 									/>
 								);
 							})}
@@ -193,6 +202,7 @@ interface BudgetCardProps {
 	theme: string;
 	getRemainingBudget: (maximum: number, spent: number) => string;
 	setDialog: Dispatch<React.SetStateAction<BudgetDialogAction>>;
+	latestSpending: Transaction[];
 }
 
 function BudgetCard({
@@ -200,6 +210,7 @@ function BudgetCard({
 	theme,
 	getRemainingBudget,
 	setDialog,
+	latestSpending,
 }: BudgetCardProps) {
 	const initial = getPercentage(budget.spent, budget.maximum);
 	const progress = initial > 100 ? 100 : initial;
@@ -281,6 +292,74 @@ function BudgetCard({
 						</div>
 					</div>
 				</div>
+
+				{latestSpending.length > 0 ? (
+					<div className="bg-beige-100 grid gap-5 rounded-xl p-4 md:p-5">
+						<div className="flex items-center justify-between">
+							<p className="leading-normal font-bold text-gray-900">
+								Latest Spending
+							</p>
+							<Link
+								to="/transactions"
+								className="group flex items-center gap-4"
+							>
+								<span className="text-sm leading-normal text-gray-500 group-hover:text-gray-900">
+									See All
+								</span>
+								<svg
+									width={5}
+									height={9}
+									viewBox="0 0 5 9"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<path
+										d="M.64.11l3.75 3.75a.375.375 0 010 .53L.64 8.14A.375.375 0 010 7.875v-7.5A.375.375 0 01.64.109z"
+										className="fill-gray-500 group-hover:fill-gray-900"
+									/>
+								</svg>
+							</Link>
+						</div>
+
+						<ul>
+							{latestSpending.map((ls, i) => {
+								return (
+									<li
+										key={ls.id}
+										className="flex items-center justify-between"
+										style={{
+											paddingBottom:
+												i < latestSpending.length - 1 ? '0.75rem' : '0',
+											borderBottom:
+												i < latestSpending.length - 1
+													? '1px solid var(--color-gray-500)'
+													: 'none',
+											marginBottom:
+												i < latestSpending.length - 1 ? '0.75rem' : '0',
+										}}
+									>
+										<div className="flex items-center gap-4">
+											<div className="hidden size-8 overflow-hidden rounded-full md:inline-flex">
+												<img src={ls.avatar} alt={`${ls.name} avatar`} />
+											</div>
+											<p className="text-xs leading-normal font-bold text-gray-900">
+												{ls.name}
+											</p>
+										</div>
+										<div className="grid justify-items-end gap-1">
+											<p className="text-xs leading-normal font-bold text-gray-900">
+												-${formatPrice(Math.abs(ls.amount))}
+											</p>
+											<p className="text-xs leading-normal text-gray-500">
+												{formatDate(ls.date)}
+											</p>
+										</div>
+									</li>
+								);
+							})}
+						</ul>
+					</div>
+				) : null}
 			</div>
 		</li>
 	);
