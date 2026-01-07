@@ -4,6 +4,7 @@ import type { Colors } from '../types/colors';
 import ScrollAreaComponent from './ui/ScrollArea';
 import type { FormState } from 'react-hook-form';
 import type { PotFormValues } from '../hooks/usePotForm';
+import { kebabToTitle } from '../utils/kebabToTitleCase';
 
 interface Props {
 	value?: Colors;
@@ -87,7 +88,7 @@ export const ColorSelect = forwardRef<HTMLButtonElement, Props>(
 													style={{ backgroundColor: THEME_COLORS[c] }}
 												></div>
 												<span className="text-sm leading-normal text-gray-900">
-													{c}
+													{kebabToTitle(c)}
 												</span>
 											</div>
 											<span className="text-xs leading-normal text-gray-900">
