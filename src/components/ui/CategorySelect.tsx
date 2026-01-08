@@ -1,9 +1,9 @@
 import * as Select from '@radix-ui/react-select';
 import { forwardRef } from 'react';
-import ScrollAreaComponent from './ui/ScrollArea';
+import ScrollAreaComponent from './ScrollArea';
 import type { FormState } from 'react-hook-form';
-import type { Categories } from '../types/categories';
-import type { BudgetFormValues } from '../hooks/useBudgetForm';
+import type { Categories } from '../../types/categories';
+import type { BudgetFormValues } from '../../hooks/useBudgetForm';
 
 interface Props {
 	value?: Categories;

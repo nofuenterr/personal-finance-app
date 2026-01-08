@@ -46,18 +46,6 @@
 	--color-white: #ffffff;
 }
 
-/* @layer utilities {
-	.no-spinner {
-		appearance: textfield;
-	}
-
-	.no-spinner::-webkit-inner-spin-button,
-	.no-spinner::-webkit-outer-spin-button {
-		appearance: none;
-		margin: 0;
-	}
-} */
-
 @custom-variant dark (&:where(.dark, .dark *));
 
 @layer utilities {

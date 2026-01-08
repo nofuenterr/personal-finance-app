@@ -1,85 +1,87 @@
-import { ColorSelect } from './ColorSelect';
-import { Colors } from '../types/colors';
-import type { BudgetDialogAction } from '../pages/Budgets';
-import { useBudgetForm, type BudgetFormValues } from '../hooks/useBudgetForm';
-import { Categories } from '../types/categories';
-import { CategorySelect } from './CategorySelect';
+import { ColorSelect } from '../ui/ColorSelect';
+import { usePotForm, type PotFormValues } from '../../hooks/usePotForm';
+import { Colors } from '../../types/colors';
+import type { PotDialogAction } from '../../pages/Pots';
 
 interface Props {
-	dialog: BudgetDialogAction;
-	initial?: Partial<BudgetFormValues>;
+	dialog: PotDialogAction;
+	initial?: Partial<PotFormValues>;
 	editingId?: string;
 	usedColors: Colors[];
-	usedCategories: Categories[];
-	onSubmit: (data: BudgetFormValues) => void;
+	onSubmit: (data: PotFormValues) => void;
 }
 
-export function BudgetForm({
+export function PotForm({
 	dialog,
 	initial,
 	editingId,
 	usedColors,
-	usedCategories,
 	onSubmit,
 }: Props) {
-	const { register, handleSubmit, setValue, watch, formState } = useBudgetForm(
+	const { register, handleSubmit, setValue, watch, formState } = usePotForm(
 		initial,
 		editingId
 	);
 
+	const name = watch('name');
 	const adjustedUsedColors =
 		dialog?.type === 'edit'
 			? usedColors.filter((c) => c !== dialog.object.theme)
 			: usedColors;
 
-	const adjustedUsedCategories =
-		dialog?.type === 'edit'
-			? usedCategories.filter((c) => c !== dialog.object.category)
-			: usedCategories;
-
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
 			<div className="grid gap-1">
-				<label className="grid gap-1">
-					<span className="text-xs leading-normal font-bold text-gray-500">
-						Theme
-					</span>
-					<CategorySelect
-						value={watch('category')}
-						options={Object.values(Categories)}
-						disabledOptions={adjustedUsedCategories}
-						onChange={(v) => setValue('category', v)}
-						formState={formState}
-					/>
+				<label
+					className="text-xs leading-normal font-bold text-gray-500"
+					htmlFor="potName"
+				>
+					Pot Name
 				</label>
-				<p className="text-red text-xs leading-normal">
-					{formState.errors.category?.message}
+				<input
+					{...register('name')}
+					placeholder="Pot name"
+					className="border-beige-500 w-full rounded-lg border px-5 py-3"
+					id="potName"
+					type="text"
+					maxLength={30}
+					style={{
+						borderColor: formState.errors.name
+							? 'var(--color-red)'
+							: 'var(--color-beige-500)',
+					}}
+				/>
+				<p className="flex justify-between text-xs leading-normal text-gray-500">
+					<span className="text-red">{formState.errors.name?.message}</span>
+					<span className="justify-self-end">
+						{30 - name?.length} characters left
+					</span>
 				</p>
 			</div>
 
 			<div className="grid gap-1">
 				<label
 					className="text-xs leading-normal font-bold text-gray-500"
-					htmlFor="maximum"
+					htmlFor="target"
 				>
-					Maximum Spend
+					Target
 				</label>
 				<input
-					{...register('maximum', { valueAsNumber: true })}
+					{...register('target', { valueAsNumber: true })}
+					placeholder="e.g. 2000"
 					type="number"
 					min={1}
 					inputMode="numeric"
 					className="no-spinner border-beige-500 w-full rounded-lg border px-5 py-3"
 					style={{
-						borderColor: formState.errors.maximum
+						borderColor: formState.errors.target
 							? 'var(--color-red)'
 							: 'var(--color-beige-500)',
 					}}
-					id="maximum"
-					placeholder="e.g. 2000"
+					id="target"
 				/>
 				<p className="text-red text-xs leading-normal">
-					{formState.errors.maximum?.message}
+					{formState.errors.target?.message}
 				</p>
 			</div>
 
@@ -106,7 +108,7 @@ export function BudgetForm({
 				className="w-full cursor-pointer rounded-lg bg-gray-900 px-6 py-4 text-sm leading-normal font-bold text-white hover:bg-gray-500"
 			>
 				{dialog?.type === 'add'
-					? 'Add Budget'
+					? 'Add Pot'
 					: dialog?.type === 'edit'
 						? 'Save Changes'
 						: 'Save Changes'}

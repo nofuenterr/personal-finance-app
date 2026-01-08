@@ -8,9 +8,9 @@ import Dialog from '../components/dialogs/Dialog';
 import type { Colors } from '../types/colors';
 import ContentWrapper from '../components/ui/ContentWrapper';
 import { useState, type Dispatch } from 'react';
-import { PotForm } from '../components/PotForm';
+import { PotForm } from '../components/forms/PotForm';
 import { useBalanceStore } from '../stores/balance';
-import { TransactionForm } from '../components/PotTransactionForm';
+import { TransactionForm } from '../components/forms/PotTransactionForm';
 import AlertDialog from '../components/dialogs/AlertDialog';
 
 export type PotDialogAction =

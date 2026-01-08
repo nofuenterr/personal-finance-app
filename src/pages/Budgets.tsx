@@ -9,7 +9,7 @@ import getPercentage from '../utils/getPercentage';
 import ScrollArea from '../components/ui/ScrollArea';
 import BudgetsChart from '../components/ui/BudgetsChart';
 import { useState, type Dispatch } from 'react';
-import { BudgetForm } from '../components/BudgetForm';
+import { BudgetForm } from '../components/forms/BudgetForm';
 import AlertDialog from '../components/dialogs/AlertDialog';
 import { Link } from 'react-router-dom';
 import { getLatestSpending } from '../utils/getLatestSpending';

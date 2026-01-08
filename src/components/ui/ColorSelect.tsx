@@ -1,10 +1,10 @@
 import * as Select from '@radix-ui/react-select';
 import { forwardRef } from 'react';
-import type { Colors } from '../types/colors';
-import ScrollAreaComponent from './ui/ScrollArea';
+import type { Colors } from '../../types/colors';
+import ScrollAreaComponent from './ScrollArea';
 import type { FormState } from 'react-hook-form';
-import type { PotFormValues } from '../hooks/usePotForm';
-import { kebabToTitle } from '../utils/kebabToTitleCase';
+import type { PotFormValues } from '../../hooks/usePotForm';
+import { kebabToTitle } from '../../utils/kebabToTitleCase';
 
 interface Props {
 	value?: Colors;

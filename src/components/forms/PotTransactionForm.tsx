@@ -1,7 +1,7 @@
-import type { PotDialogAction } from '../pages/Pots';
-import { usePotTransactionForm } from '../hooks/usePotTransactionForm';
-import formatPrice from '../utils/formatPrice';
-import getPercentage from '../utils/getPercentage';
+import type { PotDialogAction } from '../../pages/Pots';
+import { usePotTransactionForm } from '../../hooks/usePotTransactionForm';
+import formatPrice from '../../utils/formatPrice';
+import getPercentage from '../../utils/getPercentage';
 
 interface TransactionFormProps {
 	dialog: PotDialogAction;
