@@ -84,14 +84,19 @@ export default function Budgets() {
 					onClick={() => setDialog({ type: 'add' })}
 					className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500"
 				>
-					+ Add New Budget
+					<span className="[@media(max-width:22.5rem)]:hidden">
+						+ Add New Budget
+					</span>
+					<span className="hidden [@media(max-width:22.5rem)]:inline-block">
+						+ Add New
+					</span>
 				</button>
 			}
 		>
 			<ScrollArea>
 				<div className="grid items-start gap-6 lg:grid-cols-2">
 					<div className="grid gap-8 rounded-xl bg-white px-5 py-6 md:grid-cols-2 lg:grid-cols-1">
-						<div className="grid place-content-center px-8 py-5">
+						<div className="grid place-content-center">
 							<BudgetsChart budgets={budgets} />
 						</div>
 						<div className="grid gap-6">
@@ -102,7 +107,7 @@ export default function Budgets() {
 								{budgets.map((budget) => {
 									return (
 										<li key={budget.category}>
-											<div className="flex items-center gap-4">
+											<div className="grid w-full grid-cols-[auto_auto_1fr] items-center gap-4">
 												<div
 													className="h-5 w-1 rounded-lg"
 													style={{
@@ -112,7 +117,7 @@ export default function Budgets() {
 												<p className="mr-auto text-sm leading-tight text-gray-500">
 													{budget.category}
 												</p>
-												<p className="flex items-center gap-2">
+												<p className="flex items-center gap-2 justify-self-end [@media(max-width:22.5rem)]:grid [@media(max-width:22.5rem)]:justify-items-end">
 													<span className="leading-normal font-bold text-gray-900">
 														${formatPrice(budget.spent)}
 													</span>
@@ -326,7 +331,7 @@ function BudgetCard({
 								return (
 									<li
 										key={ls.id}
-										className="flex items-center justify-between"
+										className="flex items-center justify-between gap-1"
 										style={{
 											paddingBottom:
 												i < latestSpending.length - 1 ? '0.75rem' : '0',
@@ -346,7 +351,7 @@ function BudgetCard({
 												{ls.name}
 											</p>
 										</div>
-										<div className="grid justify-items-end gap-1">
+										<div className="grid justify-items-end gap-1 text-end">
 											<p className="text-xs leading-normal font-bold text-gray-900">
 												-${formatPrice(Math.abs(ls.amount))}
 											</p>

@@ -130,7 +130,7 @@ export const THEME = {
       }
     }
 
-    @media (max-width: 400px) {
+    @media (max-width: 360px) {
       .td:first-of-type {
         padding-left: 0;
 

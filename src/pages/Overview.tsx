@@ -161,7 +161,7 @@ export default function Overview() {
 											>
 												<div className="flex items-center justify-between gap-2">
 													<div className="flex items-center gap-4">
-														<div className="size-8 overflow-hidden rounded-full">
+														<div className="size-8 overflow-hidden rounded-full [@media(max-width:360px)]:hidden">
 															<img
 																src={transaction.avatar}
 																alt={`${transaction.name} avatar`}

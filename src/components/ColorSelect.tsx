@@ -62,7 +62,11 @@ export const ColorSelect = forwardRef<HTMLButtonElement, Props>(
 			</Select.Trigger>
 
 			<Select.Portal>
-				<Select.Content className="rounded-lg bg-white px-5 py-3 shadow-lg">
+				<Select.Content
+					sideOffset={16}
+					position="popper"
+					className="max-h-75 rounded-lg bg-white px-5 py-3 shadow-lg"
+				>
 					<Select.Viewport>
 						<ScrollAreaComponent>
 							{options.map((c, i) => (
@@ -81,13 +85,13 @@ export const ColorSelect = forwardRef<HTMLButtonElement, Props>(
 									}}
 								>
 									<Select.ItemText>
-										<div className="flex items-center justify-between">
+										<div className="flex items-center justify-between gap-2">
 											<div className="flex items-center gap-3">
 												<div
 													className="size-4 rounded-full"
 													style={{ backgroundColor: THEME_COLORS[c] }}
 												></div>
-												<span className="text-sm leading-normal text-gray-900">
+												<span className="text-sm leading-normal text-gray-900 hover:text-gray-500">
 													{kebabToTitle(c)}
 												</span>
 											</div>

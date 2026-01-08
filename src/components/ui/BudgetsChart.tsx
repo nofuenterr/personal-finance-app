@@ -42,7 +42,7 @@ export default function BudgetsChart({
 				<tspan
 					x="50%"
 					dy="-0.2em"
-					className="fill-gray-900 text-[2rem] leading-normal font-bold"
+					className="fill-gray-900 text-2xl leading-normal font-bold"
 				>
 					${formatPrice(totalSpent)}
 				</tspan>
@@ -63,9 +63,10 @@ export default function BudgetsChart({
 				width: '100%',
 				maxWidth: '500px',
 				maxHeight: '80vh',
-				minWidth: '240px',
-				minHeight: '240px',
+				minWidth: '175px',
+				minHeight: '175px',
 			}}
+			responsive
 		>
 			<Pie
 				data={data}

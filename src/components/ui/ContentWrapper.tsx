@@ -13,7 +13,7 @@ export default function ContentWrapper({
 }: ContentWrapperProps) {
 	return (
 		<div className="bg-beige-100 grid h-full flex-1 grid-rows-[auto_1fr] content-start items-start gap-8 px-4 py-6 md:px-10 md:py-8">
-			<header className="flex items-center justify-between">
+			<header className="flex items-center justify-between gap-2">
 				<h1 className="text-[2rem] leading-tight font-bold text-gray-900">
 					{title}
 				</h1>

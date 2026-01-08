@@ -43,7 +43,11 @@ export const CategorySelect = forwardRef<HTMLButtonElement, Props>(
 			</Select.Trigger>
 
 			<Select.Portal>
-				<Select.Content className="rounded-lg bg-white px-5 py-3 shadow-lg">
+				<Select.Content
+					sideOffset={16}
+					position="popper"
+					className="max-h-75 rounded-lg bg-white px-5 py-3 shadow-lg"
+				>
 					<Select.Viewport>
 						<ScrollAreaComponent>
 							{options.map((c, i) => (
@@ -62,8 +66,8 @@ export const CategorySelect = forwardRef<HTMLButtonElement, Props>(
 									}}
 								>
 									<Select.ItemText>
-										<div className="flex items-center justify-between">
-											<span className="text-sm leading-normal text-gray-900">
+										<div className="flex items-center justify-between gap-2">
+											<span className="text-sm leading-normal text-gray-900 hover:text-gray-500">
 												{c}
 											</span>
 											<span className="text-xs leading-normal text-gray-900">

@@ -95,7 +95,12 @@ export default function Pots() {
 					onClick={() => setDialog({ type: 'add' })}
 					className="cursor-pointer rounded-lg bg-gray-900 p-4 text-sm leading-normal font-bold text-white hover:bg-gray-500"
 				>
-					+ Add New Pot
+					<span className="[@media(max-width:22.5rem)]:hidden">
+						+ Add New Pot
+					</span>
+					<span className="hidden [@media(max-width:22.5rem)]:inline-block">
+						+ Add New
+					</span>
 				</button>
 			}
 		>
@@ -290,7 +295,7 @@ function PotCard({ pot, theme, setDialog }: PotCardProps) {
 						</div>
 					</div>
 				</div>
-				<div className="grid grid-cols-2 gap-4">
+				<div className="grid grid-cols-2 gap-4 [@media(max-width:25rem)]:grid-cols-1">
 					<button
 						onClick={() => setDialog({ type: 'deposit', object: pot })}
 						className="bg-beige-100 border-beige-100 hover:border-beige-500 cursor-pointer rounded-lg border p-4 text-sm leading-normal font-bold text-gray-900 hover:bg-white"

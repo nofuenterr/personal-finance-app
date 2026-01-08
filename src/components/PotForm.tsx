@@ -68,6 +68,7 @@ export function PotForm({
 				</label>
 				<input
 					{...register('target', { valueAsNumber: true })}
+					placeholder="e.g. 2000"
 					type="number"
 					min={1}
 					inputMode="numeric"
