@@ -58,7 +58,7 @@ export function TransactionForm({
 			<div className="grid gap-4">
 				<div className="flex items-center justify-between gap-2 overflow-hidden">
 					<p className="text-sm leading-normal text-gray-500">New Amount</p>
-					<p className="overflow-x-scroll text-[2rem] leading-tight font-bold text-gray-900">
+					<p className="overflow-x-auto text-[2rem] leading-tight font-bold text-gray-900">
 						${formatPrice(newAmount)}
 					</p>
 				</div>
