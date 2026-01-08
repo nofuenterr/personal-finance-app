@@ -207,7 +207,7 @@ function PotCard({ pot, theme, setDialog }: PotCardProps) {
 	const progress = getPercentage(pot.total, pot.target);
 
 	return (
-		<li className="rounded-xl bg-white px-5 pt-6 pb-9.5 drop-shadow-[0_8px_24px_rgba(0,0,0,0.0.5)]">
+		<li className="rounded-xl bg-white px-5 pt-6 pb-9.5">
 			<div className="grid gap-8">
 				<div className="flex items-center justify-between">
 					<div className="flex items-center gap-4">
