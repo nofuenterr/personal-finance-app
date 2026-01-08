@@ -1,6 +1,6 @@
 [
 	{
-		"avatar": "/src/assets/images/avatars/pixel-playground.jpg",
+		"avatar": "/images/pixel-playground.jpg",
 		"name": "Pixel Playground",
 		"category": "Entertainment",
 		"interval": "Monthly",
@@ -9,7 +9,7 @@
 		"paid": true
 	},
 	{
-		"avatar": "/src/assets/images/avatars/elevate-education.jpg",
+		"avatar": "/images/elevate-education.jpg",
 		"name": "Elevate Education",
 		"category": "Education",
 		"interval": "Monthly",
@@ -18,7 +18,7 @@
 		"paid": true
 	},
 	{
-		"avatar": "/src/assets/images/avatars/serenity-spa-and-wellness.jpg",
+		"avatar": "/images/serenity-spa-and-wellness.jpg",
 		"name": "Serenity Spa & Wellness",
 		"category": "Personal Care",
 		"interval": "Monthly",
@@ -27,7 +27,7 @@
 		"paid": true
 	},
 	{
-		"avatar": "/src/assets/images/avatars/aqua-flow-utilities.jpg",
+		"avatar": "/images/aqua-flow-utilities.jpg",
 		"name": "Aqua Flow Utilities",
 		"category": "Bills",
 		"interval": "Monthly",
@@ -36,7 +36,7 @@
 		"paid": false
 	},
 	{
-		"avatar": "/src/assets/images/avatars/ecofuel-energy.jpg",
+		"avatar": "/images/ecofuel-energy.jpg",
 		"name": "EcoFuel Energy",
 		"category": "Bills",
 		"interval": "Monthly",
@@ -45,7 +45,7 @@
 		"paid": false
 	},
 	{
-		"avatar": "/src/assets/images/avatars/bytewise.jpg",
+		"avatar": "/images/bytewise.jpg",
 		"name": "ByteWise",
 		"category": "Lifestyle",
 		"interval": "Monthly",
@@ -54,7 +54,7 @@
 		"paid": false
 	},
 	{
-		"avatar": "/src/assets/images/avatars/nimbus-data-storage.jpg",
+		"avatar": "/images/nimbus-data-storage.jpg",
 		"name": "Nimbus Data Storage",
 		"category": "Bills",
 		"interval": "Monthly",
@@ -63,7 +63,7 @@
 		"paid": false
 	},
 	{
-		"avatar": "/src/assets/images/avatars/spark-electric-solutions.jpg",
+		"avatar": "/images/spark-electric-solutions.jpg",
 		"name": "Spark Electric Solutions",
 		"category": "Bills",
 		"interval": "Monthly",
