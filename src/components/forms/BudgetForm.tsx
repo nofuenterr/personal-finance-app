@@ -1,7 +1,10 @@
 import { ColorSelect } from '../ui/ColorSelect';
 import { Colors } from '../../types/colors';
 import type { BudgetDialogAction } from '../../pages/Budgets';
-import { useBudgetForm, type BudgetFormValues } from '../../hooks/useBudgetForm';
+import {
+	useBudgetForm,
+	type BudgetFormValues,
+} from '../../hooks/useBudgetForm';
 import { Categories } from '../../types/categories';
 import { CategorySelect } from '../ui/CategorySelect';
 

@@ -62,13 +62,11 @@ export default function Budgets() {
 	const handleAdd = (data: Omit<Budget, 'id' | 'spent'>): void => {
 		addBudget(data);
 		setDialog(null);
-		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 	};
 
 	const handleEdit = (data: Partial<Omit<Budget, 'id'>>): void => {
 		if (dialog?.type === 'edit') editBudget(dialog.object.id, data);
 		setDialog(null);
-		document.dispatchEvent(new KeyboardEvent('keydonm wn', { key: 'Escape' }));
 	};
 
 	const handleDelete = () => {
@@ -106,7 +104,7 @@ export default function Budgets() {
 							<ul className="grid gap-4">
 								{budgets.map((budget) => {
 									return (
-										<li key={budget.category}>
+										<li key={budget.id}>
 											<div className="grid w-full grid-cols-[auto_auto_1fr] items-center gap-4">
 												<div
 													className="h-5 w-1 rounded-lg"
@@ -138,7 +136,7 @@ export default function Budgets() {
 							{budgets.map((budget) => {
 								return (
 									<BudgetCard
-										key={budget.category}
+										key={budget.id}
 										budget={budget}
 										theme={THEME_COLORS[budget.theme]}
 										getRemainingBudget={getRemainingBudget}
@@ -155,49 +153,56 @@ export default function Budgets() {
 				</div>
 			</ScrollArea>
 
-			{dialog?.type === 'add' && (
-				<Dialog
-					open={dialog?.type === 'add'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					title="Add New Budget"
-					description="Choose a category to set a spending budget. These categories can help you monitor spending."
-				>
-					<BudgetForm
-						dialog={dialog}
-						usedCategories={usedCategories}
-						usedColors={usedColors}
-						onSubmit={(data) => handleAdd(data)}
-					/>
-				</Dialog>
-			)}
-
-			{dialog?.type === 'edit' && (
-				<Dialog
-					open={dialog?.type === 'edit'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					title="Edit Budget"
-					description="As your budgets change, feel free to update your spending limits."
-				>
-					<BudgetForm
-						initial={dialog.object}
-						editingId={dialog.object.id}
-						usedCategories={usedCategories}
-						usedColors={usedColors}
-						onSubmit={(data) => handleEdit(data)}
-						dialog={dialog}
-					/>
-				</Dialog>
-			)}
-
-			{dialog?.type === 'delete' && (
-				<AlertDialog
-					open={dialog?.type === 'delete'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					name={dialog.object.category}
-					type="budget"
-					handleDelete={handleDelete}
-				/>
-			)}
+			{(() => {
+				switch (dialog?.type) {
+					case 'add':
+						return (
+							<Dialog
+								open={dialog?.type === 'add'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								title="Add New Budget"
+								description="Choose a category to set a spending budget. These categories can help you monitor spending."
+							>
+								<BudgetForm
+									dialog={dialog}
+									usedCategories={usedCategories}
+									usedColors={usedColors}
+									onSubmit={(data) => handleAdd(data)}
+								/>
+							</Dialog>
+						);
+					case 'edit':
+						return (
+							<Dialog
+								open={dialog?.type === 'edit'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								title="Edit Budget"
+								description="As your budgets change, feel free to update your spending limits."
+							>
+								<BudgetForm
+									initial={dialog.object}
+									editingId={dialog.object.id}
+									usedCategories={usedCategories}
+									usedColors={usedColors}
+									onSubmit={(data) => handleEdit(data)}
+									dialog={dialog}
+								/>
+							</Dialog>
+						);
+					case 'delete':
+						return (
+							<AlertDialog
+								open={dialog?.type === 'delete'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								name={dialog.object.category}
+								type="budget"
+								handleDelete={handleDelete}
+							/>
+						);
+					default:
+						return null;
+				}
+			})()}
 		</ContentWrapper>
 	);
 }
@@ -233,7 +238,13 @@ function BudgetCard({
 							{budget.category}
 						</h2>
 					</div>
-					<DropdownMenu item="Budget" setDialog={setDialog} object={budget}>
+					<DropdownMenu<Budget>
+						item="Budget"
+						object={budget}
+						setDialog={(action) => {
+							if (action) setDialog(action);
+						}}
+					>
 						<button className="cursor-pointer">
 							<svg
 								width="15"

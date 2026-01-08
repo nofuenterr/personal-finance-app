@@ -1,25 +1,24 @@
 import { DropdownMenu } from 'radix-ui';
-import type { Dispatch, ReactNode } from 'react';
-import type { PotDialogAction } from '../../pages/Pots';
-import { type Pot } from '../../stores/pots';
-import type { Budget } from '../../stores/budgets';
-import type { BudgetDialogAction } from '../../pages/Budgets';
+import type { ReactNode } from 'react';
 
-interface DropdownMenuProps {
+type DialogAction<T> =
+	| { type: 'edit'; object: T }
+	| { type: 'delete'; object: T }
+	| null;
+
+interface DropdownMenuProps<T> {
 	item: 'Pot' | 'Budget';
 	children: ReactNode;
-	setDialog:
-		| Dispatch<React.SetStateAction<PotDialogAction>>
-		| Dispatch<React.SetStateAction<BudgetDialogAction>>;
-	object: Pot | Budget;
+	setDialog: (action: DialogAction<T>) => void;
+	object: T;
 }
 
-export default function DropdownMenuComponent({
+export default function DropdownMenuComponent<T>({
 	item,
 	children,
 	setDialog,
 	object,
-}: DropdownMenuProps) {
+}: DropdownMenuProps<T>) {
 	return (
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild>{children}</DropdownMenu.Trigger>

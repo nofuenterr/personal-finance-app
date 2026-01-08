@@ -113,29 +113,24 @@ export default function Overview() {
 								</div>
 
 								<ul className="grid grid-cols-2 gap-y-4">
-									{pots
-										.slice(0, 4)
-										.map((pot: Pot, index: number): ReactNode => {
-											return (
-												<li
-													key={`${pot.name}-${index}`}
-													className="flex items-center gap-4"
-												>
-													<div
-														className="h-11 w-1 rounded-lg"
-														style={{ backgroundColor: THEME_COLORS[pot.theme] }}
-													></div>
-													<div className="grid gap-1">
-														<p className="text-xs leading-normal text-gray-500">
-															{pot.name}
-														</p>
-														<p className="text-sm leading-normal font-bold text-gray-900">
-															${formatPrice(pot.total)}
-														</p>
-													</div>
-												</li>
-											);
-										})}
+									{pots.slice(0, 4).map((pot: Pot): ReactNode => {
+										return (
+											<li key={pot.id} className="flex items-center gap-4">
+												<div
+													className="h-11 w-1 rounded-lg"
+													style={{ backgroundColor: THEME_COLORS[pot.theme] }}
+												></div>
+												<div className="grid gap-1">
+													<p className="text-xs leading-normal text-gray-500">
+														{pot.name}
+													</p>
+													<p className="text-sm leading-normal font-bold text-gray-900">
+														${formatPrice(pot.total)}
+													</p>
+												</div>
+											</li>
+										);
+									})}
 								</ul>
 							</div>
 						</OverviewItem>
@@ -205,30 +200,28 @@ export default function Overview() {
 									<BudgetsChart budgets={budgets} />
 								</div>
 								<ul className="grid grid-cols-2 gap-4 sm:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-1">
-									{budgets
-										.slice(0, 4)
-										.map((budget: Budget, index: number): ReactNode => {
-											return (
-												<li key={`${budget.category}-${index}`}>
-													<div className="flex items-center gap-4">
-														<div
-															className="h-11 w-1 rounded-lg"
-															style={{
-																backgroundColor: THEME_COLORS[budget.theme],
-															}}
-														></div>
-														<div className="grid gap-1">
-															<p className="text-xs leading-normal text-gray-500">
-																{budget.category}
-															</p>
-															<p className="text-sm leading-normal font-bold text-gray-900">
-																${formatPrice(budget.spent)}
-															</p>
-														</div>
+									{budgets.slice(0, 4).map((budget: Budget): ReactNode => {
+										return (
+											<li key={budget.id}>
+												<div className="flex items-center gap-4">
+													<div
+														className="h-11 w-1 rounded-lg"
+														style={{
+															backgroundColor: THEME_COLORS[budget.theme],
+														}}
+													></div>
+													<div className="grid gap-1">
+														<p className="text-xs leading-normal text-gray-500">
+															{budget.category}
+														</p>
+														<p className="text-sm leading-normal font-bold text-gray-900">
+															${formatPrice(budget.spent)}
+														</p>
 													</div>
-												</li>
-											);
-										})}
+												</div>
+											</li>
+										);
+									})}
 								</ul>
 							</div>
 						</OverviewItem>

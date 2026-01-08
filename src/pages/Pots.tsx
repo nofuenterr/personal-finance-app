@@ -56,13 +56,11 @@ export default function Pots() {
 	const handleAdd = (data: Omit<Pot, 'id' | 'total'>): void => {
 		addPot(data);
 		setDialog(null);
-		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 	};
 
 	const handleEdit = (data: Partial<Omit<Pot, 'id'>>): void => {
 		if (dialog?.type === 'edit') editPot(dialog.object.id, data);
 		setDialog(null);
-		document.dispatchEvent(new KeyboardEvent('keydonm wn', { key: 'Escape' }));
 	};
 
 	const handleDelete = () => {
@@ -77,14 +75,12 @@ export default function Pots() {
 		if (dialog?.type === 'deposit') deposit(dialog.object.id, amount);
 		setDialog(null);
 		subtractCurrent(amount);
-		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 	};
 
 	const handleWithdrawal = (amount: number): void => {
 		if (dialog?.type === 'withdraw') withdraw(dialog.object.id, amount);
 		setDialog(null);
 		addCurrent(amount);
-		document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
 	};
 
 	return (
@@ -109,7 +105,7 @@ export default function Pots() {
 					{pots.map((pot: Pot) => {
 						return (
 							<PotCard
-								key={pot.name}
+								key={pot.id}
 								pot={pot}
 								theme={THEME_COLORS[pot.theme]}
 								setDialog={setDialog}
@@ -119,77 +115,84 @@ export default function Pots() {
 				</ul>
 			</ScrollArea>
 
-			{dialog?.type === 'add' && (
-				<Dialog
-					open={dialog?.type === 'add'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					title="Add New Pot"
-					description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
-				>
-					<PotForm
-						dialog={dialog}
-						usedColors={usedColors}
-						onSubmit={(data) => handleAdd(data)}
-					/>
-				</Dialog>
-			)}
-
-			{dialog?.type === 'edit' && (
-				<Dialog
-					open={dialog?.type === 'edit'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					title="Edit Pot"
-					description="If your saving targets change, feel free to update your pots."
-				>
-					<PotForm
-						initial={dialog.object}
-						editingId={dialog.object.id}
-						usedColors={usedColors}
-						onSubmit={(data) => handleEdit(data)}
-						dialog={dialog}
-					/>
-				</Dialog>
-			)}
-
-			{dialog?.type === 'delete' && (
-				<AlertDialog
-					open={dialog?.type === 'delete'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					name={dialog.object.name}
-					type="pot"
-					handleDelete={handleDelete}
-				/>
-			)}
-
-			{dialog?.type === 'deposit' && (
-				<Dialog
-					open={dialog?.type === 'deposit'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					title="Add New Pot"
-					description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
-				>
-					<TransactionForm
-						dialog={dialog}
-						max={dialog.object.total}
-						onSubmit={(amount) => handleDeposit(amount)}
-					/>
-				</Dialog>
-			)}
-
-			{dialog?.type === 'withdraw' && (
-				<Dialog
-					open={dialog?.type === 'withdraw'}
-					onOpenChange={(open: boolean) => !open && setDialog(null)}
-					title={`Withdraw from '${dialog.object.name}'`}
-					description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
-				>
-					<TransactionForm
-						dialog={dialog}
-						max={dialog.object.total}
-						onSubmit={(amount) => handleWithdrawal(amount)}
-					/>
-				</Dialog>
-			)}
+			{(() => {
+				switch (dialog?.type) {
+					case 'add':
+						return (
+							<Dialog
+								open={dialog?.type === 'add'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								title="Add New Pot"
+								description="Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
+							>
+								<PotForm
+									dialog={dialog}
+									usedColors={usedColors}
+									onSubmit={(data) => handleAdd(data)}
+								/>
+							</Dialog>
+						);
+					case 'edit':
+						return (
+							<Dialog
+								open={dialog?.type === 'edit'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								title="Edit Pot"
+								description="If your saving targets change, feel free to update your pots."
+							>
+								<PotForm
+									initial={dialog.object}
+									editingId={dialog.object.id}
+									usedColors={usedColors}
+									onSubmit={(data) => handleEdit(data)}
+									dialog={dialog}
+								/>
+							</Dialog>
+						);
+					case 'delete':
+						return (
+							<AlertDialog
+								open={dialog?.type === 'delete'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								name={dialog.object.name}
+								type="pot"
+								handleDelete={handleDelete}
+							/>
+						);
+					case 'deposit':
+						return (
+							<Dialog
+								open={dialog?.type === 'deposit'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								title="Add New Pot"
+								description="Add money to your pot to keep it separate from your main balance. As soon as you add this money, it will be deducted from your current balance."
+							>
+								<TransactionForm
+									dialog={dialog}
+									max={dialog.object.total}
+									onSubmit={(amount) => handleDeposit(amount)}
+								/>
+							</Dialog>
+						);
+					case 'withdraw':
+						return (
+							<Dialog
+								open={dialog?.type === 'withdraw'}
+								onOpenChange={(open: boolean) => !open && setDialog(null)}
+								title={`Withdraw from '${dialog.object.name}'`}
+								description="Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
+							>
+								<TransactionForm
+									dialog={dialog}
+									max={dialog.object.total}
+									onSubmit={(amount) => handleWithdrawal(amount)}
+								/>
+							</Dialog>
+						);
+					default:
+						return null;
+				}
+			})()}
 		</ContentWrapper>
 	);
 }
@@ -216,7 +219,13 @@ function PotCard({ pot, theme, setDialog }: PotCardProps) {
 							{pot.name}
 						</h2>
 					</div>
-					<DropdownMenu item="Pot" object={pot} setDialog={setDialog}>
+					<DropdownMenu<Pot>
+						item="Pot"
+						object={pot}
+						setDialog={(action) => {
+							if (action) setDialog(action);
+						}}
+					>
 						<button className="cursor-pointer">
 							<svg
 								width="15"
