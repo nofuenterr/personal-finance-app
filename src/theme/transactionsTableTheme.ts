@@ -109,7 +109,7 @@ export const THEME = {
         padding-left: 0;
 
         & div .avatar-wrapper {
-          position: static        
+          position: static
         }
       }
 
@@ -127,6 +127,20 @@ export const THEME = {
 
       .td:last-of-type {
         grid-column: 4;
+      }
+    }
+
+    @media (max-width: 400px) {
+      .td:first-of-type {
+        padding-left: 0;
+
+        & div .avatar-wrapper {
+          display: none;
+        }
+      }
+
+      .td:nth-of-type(2) {
+        padding-left: 0;
       }
     }
   `,

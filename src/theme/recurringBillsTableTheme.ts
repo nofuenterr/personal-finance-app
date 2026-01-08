@@ -113,6 +113,14 @@ export const THEME = {
         justify-self: end;
       }
     }
+
+    @media (max-width: 400px) {
+      .td:first-of-type {
+        & div .avatar-wrapper {
+          display: none;
+        }
+      }
+    }
   `,
 	BaseCell: `
 
