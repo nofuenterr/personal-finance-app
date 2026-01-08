@@ -82,8 +82,11 @@ export default function Transactions() {
 						</svg>
 					</div>
 
-					<div className="hidden text-sm leading-normal sm:flex sm:items-center sm:gap-2">
-						<label className="text-nowrap text-gray-500" htmlFor="sort">
+					<div className="flex items-center gap-2 text-sm leading-normal">
+						<label
+							className="hidden text-nowrap text-gray-500 sm:inline-block"
+							htmlFor="sort"
+						>
 							Sort by
 						</label>
 						<Select.Root
@@ -92,22 +95,38 @@ export default function Transactions() {
 								setSort(value);
 							}}
 						>
-							<Select.Trigger className="border-beige-500 flex cursor-pointer items-center gap-4 rounded-lg border bg-white px-5 py-3 text-gray-900 open:border-gray-900 hover:border-gray-500">
-								<Select.Value placeholder="Select sort" />
-								<Select.Icon>
+							<Select.Trigger>
+								<div className="sm:hidden">
 									<svg
-										width={11}
-										height={6}
-										viewBox="0 0 11 6"
+										width={15}
+										height={15}
+										viewBox="0 0 15 15"
 										fill="none"
 										xmlns="http://www.w3.org/2000/svg"
 									>
 										<path
-											d="M10.854.854l-5 5a.5.5 0 01-.707 0l-5-5A.5.5 0 01.5 0h10a.5.5 0 01.354.854z"
+											d="M13.75 0H1.25A1.25 1.25 0 000 1.25v12.5A1.25 1.25 0 001.25 15h12.5A1.25 1.25 0 0015 13.75V1.25A1.25 1.25 0 0013.75 0zM3.125 3.125h7.5a.625.625 0 110 1.25h-7.5a.625.625 0 010-1.25zm3.125 8.75H3.125a.625.625 0 110-1.25H6.25a.625.625 0 110 1.25zm.625-3.75h-3.75a.625.625 0 010-1.25h3.75a.625.625 0 010 1.25zm6.067 2.317l-1.875 1.875a.627.627 0 01-.884 0l-1.875-1.875a.625.625 0 01.884-.884l.808.808V6.875a.625.625 0 111.25 0v3.491l.808-.808a.625.625 0 01.884.884z"
 											className="fill-gray-900"
 										/>
 									</svg>
-								</Select.Icon>
+								</div>
+								<div className="border-beige-500 hidden cursor-pointer items-center gap-4 rounded-lg border bg-white px-5 py-3 text-gray-900 open:border-gray-900 hover:border-gray-500 sm:flex">
+									<Select.Value placeholder="Select sort" />
+									<Select.Icon>
+										<svg
+											width={11}
+											height={6}
+											viewBox="0 0 11 6"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M10.854.854l-5 5a.5.5 0 01-.707 0l-5-5A.5.5 0 01.5 0h10a.5.5 0 01.354.854z"
+												className="fill-gray-900"
+											/>
+										</svg>
+									</Select.Icon>
+								</div>
 							</Select.Trigger>
 
 							<Select.Portal>
@@ -150,23 +169,11 @@ export default function Transactions() {
 						</Select.Root>
 					</div>
 
-					<button className="sm:hidden">
-						<svg
-							width={15}
-							height={15}
-							viewBox="0 0 15 15"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
+					<div className="flex items-center gap-2 text-sm leading-normal">
+						<label
+							className="hidden text-gray-500 sm:inline-block"
+							htmlFor="category"
 						>
-							<path
-								d="M13.75 0H1.25A1.25 1.25 0 000 1.25v12.5A1.25 1.25 0 001.25 15h12.5A1.25 1.25 0 0015 13.75V1.25A1.25 1.25 0 0013.75 0zM3.125 3.125h7.5a.625.625 0 110 1.25h-7.5a.625.625 0 010-1.25zm3.125 8.75H3.125a.625.625 0 110-1.25H6.25a.625.625 0 110 1.25zm.625-3.75h-3.75a.625.625 0 010-1.25h3.75a.625.625 0 010 1.25zm6.067 2.317l-1.875 1.875a.627.627 0 01-.884 0l-1.875-1.875a.625.625 0 01.884-.884l.808.808V6.875a.625.625 0 111.25 0v3.491l.808-.808a.625.625 0 01.884.884z"
-								className="fill-gray-900"
-							/>
-						</svg>
-					</button>
-
-					<div className="hidden text-sm leading-normal sm:flex sm:items-center sm:gap-2">
-						<label className="text-gray-500" htmlFor="category">
 							Category
 						</label>
 						<Select.Root
@@ -176,22 +183,39 @@ export default function Transactions() {
 								setPage(0);
 							}}
 						>
-							<Select.Trigger className="border-beige-500 flex cursor-pointer items-center gap-4 rounded-lg border bg-white px-5 py-3 text-gray-900 open:border-gray-900 hover:border-gray-500">
-								<Select.Value placeholder="Select category" />
-								<Select.Icon>
+							<Select.Trigger>
+								<div className="sm:hidden">
 									<svg
-										width={11}
-										height={6}
-										viewBox="0 0 11 6"
+										width={17}
+										height={15}
+										viewBox="0 0 17 15"
 										fill="none"
 										xmlns="http://www.w3.org/2000/svg"
 									>
 										<path
-											d="M10.854.854l-5 5a.5.5 0 01-.707 0l-5-5A.5.5 0 01.5 0h10a.5.5 0 01.354.854z"
+											d="M15.92 2.09l-.006.008-5.291 5.65v4.335a1.251 1.251 0 01-.557 1.042l-2.5 1.667a1.25 1.25 0 01-1.943-1.042V7.748L.33 2.098.325 2.09A1.25 1.25 0 011.248 0h13.75a1.25 1.25 0 01.925 2.09h-.003z"
 											className="fill-gray-900"
 										/>
 									</svg>
-								</Select.Icon>
+								</div>
+
+								<div className="border-beige-500 hidden cursor-pointer items-center gap-4 rounded-lg border bg-white px-5 py-3 text-gray-900 open:border-gray-900 hover:border-gray-500 sm:flex">
+									<Select.Value placeholder="Select category" />
+									<Select.Icon>
+										<svg
+											width={11}
+											height={6}
+											viewBox="0 0 11 6"
+											fill="none"
+											xmlns="http://www.w3.org/2000/svg"
+										>
+											<path
+												d="M10.854.854l-5 5a.5.5 0 01-.707 0l-5-5A.5.5 0 01.5 0h10a.5.5 0 01.354.854z"
+												className="fill-gray-900"
+											/>
+										</svg>
+									</Select.Icon>
+								</div>
 							</Select.Trigger>
 
 							<Select.Portal>
@@ -251,21 +275,6 @@ export default function Transactions() {
 							</Select.Portal>
 						</Select.Root>
 					</div>
-
-					<button className="sm:hidden">
-						<svg
-							width={17}
-							height={15}
-							viewBox="0 0 17 15"
-							fill="none"
-							xmlns="http://www.w3.org/2000/svg"
-						>
-							<path
-								d="M15.92 2.09l-.006.008-5.291 5.65v4.335a1.251 1.251 0 01-.557 1.042l-2.5 1.667a1.25 1.25 0 01-1.943-1.042V7.748L.33 2.098.325 2.09A1.25 1.25 0 011.248 0h13.75a1.25 1.25 0 01.925 2.09h-.003z"
-								className="fill-gray-900"
-							/>
-						</svg>
-					</button>
 				</div>
 
 				{sortedTransactions.length > 0 ? (
