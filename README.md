@@ -1,87 +1,118 @@
-## Frontend Mentor
-
 # Personal Finance App
 
-A responsive personal finance application built to help users track spending, manage savings, and stay on top of recurring bills. The app provides a clear overview of financial activity while allowing deeper control through detailed transaction views, budgets, and savings pots.
+> A personal finance dashboard for tracking transactions, managing budgets, and growing savings.
 
-Users can search, sort, and filter transactions, set savings goals, move money between pots, and monitor progress over time. Budgets and recurring bills make it easier to understand where money is going each month, while keyboard accessibility and responsive layouts ensure the app is usable across devices.
+![Preview](public/Budgets-desktop.png)
 
-This project focuses on clean UI, accessible interactions, and predictable state management, making it both practical to use and easy to extend.
-
-This project is also my first one after learning Typescript and I was able to put what I learned into practice albeit with some assistance from google for things I wasn't able to study / haven't learned about. I believe it was a step in the right direction as I continue to hone my skills in the Frontend as well as for the various frameworks and tools which is essential for my growth and improvement.
-
-### Features
-
-- See all of the personal finance app data at-a-glance on the overview page
-- View all transactions on the transactions page with pagination for every ten transactions
-- Search, sort, and filter transactions
-- Create, read, update, delete (CRUD) budgets and saving pots
-- View the latest three transactions for each budget category created
-- View progress towards each pot
-- Add money to and withdraw money from pots
-- View recurring bills and the status of each for the current month
-- Search and sort recurring bills
-- Receive validation messages if required form fields aren't completed
-- Navigate the whole app and perform all actions using only their keyboard
-- View the optimal layout for the interface depending on their device's screen size
-- See hover and focus states for all interactive elements on the page
-
-### Built With
-
-- React + Vite
-- Typescript (types)
-- React Hook Form (form state and validation)
-- React Router (navigation)
-- Tailwind CSS (styling)
-- Recharts (pie chart)
-- Radix UI (accessible and unstyled ui assets)
-- Zustand (global state and data persistence)
-
-### Getting Started
-
-In order to setup and work on this project on your own, you will need to:
-
-Clone this project:<br>
-`git clone https://github.com/nofuenterr/personal-finance-app.git`
-
-Once you have cloned this project, you can install the required dependencies by using:<br>
-`npm install`
-
-A live demo of the project can be started by using:<br>
-`npm run preview`
-
-Distribution files can be produced using:<br>
-`npm run build`
-
-### Credits/Acknowledgments
-
-This project is for personal use only. I do not own any of the rights for the assets used in this project.
-
-### Display
-
-<!-- #### Laptop - Light
-
-![Laptop - Light](public/Laptop-Light.png)
-
-#### Laptop - Dark
-
-![Laptop - Dark](public/Laptop-Dark.png)
-
-#### Tablet
-
-![Tablet](public/Tablet.png)
-
-#### Phone
-
-![Phone](public/Phone.png) -->
-
-### To-do
-
-- [ ] Add animations & transitions (e.g. sidebar)
-- [ ] Add form for new transactions / recurring bills
-- [ ] Adjust scrollbar positions so that they aren't hovering over the content
-- [ ] Improve UI and refactor code for better readability and easier to debug
+**Live Demo:** [personal-finance-app-rrn.vercel.app](https://personal-finance-app-rrn.vercel.app)
 
 ---
 
-Developed by **RR Nofuente**
+## Overview
+
+Personal Finance App is a responsive financial management tool built as a Frontend Mentor challenge. Users get a full dashboard overview of their finances, can drill into paginated transactions, set and manage budgets, track savings in pots, and monitor recurring bills — all with keyboard accessibility and responsive layouts across all screen sizes.
+
+---
+
+## Features
+
+- Dashboard overview of all financial data at a glance
+- Paginated transaction list (10 per page) with search, sort, and filter
+- Full CRUD for budgets — with the latest 3 transactions per budget category displayed
+- Full CRUD for savings pots — deposit and withdraw money, track progress toward goals
+- Recurring bills view with monthly status indicators, search, and sort
+- Pie chart visualization of budget breakdown
+- Form validation across all inputs
+- Fully keyboard-navigable UI
+- Responsive layout for mobile, tablet, and desktop
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+|---|---|
+| Framework | React + Vite |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Routing | React Router |
+| Forms | React Hook Form + Zod |
+| UI Components | Radix UI |
+| State Management | Zustand |
+| Charts | Recharts |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js `v18+`
+
+### Installation
+
+```bash
+git clone https://github.com/nofuenterr/personal-finance-app.git
+cd personal-finance-app
+npm install
+```
+
+### Running the App
+
+```bash
+npm run preview
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+---
+
+## Screenshots
+
+### Overview
+| Desktop | Tablet | Mobile | 
+|---|---|---|
+| ![Desktop](public/Overview-desktop.png) | ![Tablet](public/Overview-tablet.png) | ![Mobile](public/Overview-mobile.png) |
+
+### Transactions
+| Desktop | Tablet | Mobile | 
+|---|---|---|
+| ![Desktop](public/Transactions-desktop.png) | ![Tablet](public/Transactions-tablet.png) | ![Mobile](public/Transactions-mobile.png) |
+
+### Budgets
+| Desktop | Tablet | Mobile | 
+|---|---|---|
+| ![Desktop](public/Budgets-desktop.png) | ![Tablet](public/Budgets-tablet.png) | ![Mobile](public/Budgets-mobile.png) |
+
+### Pots
+| Desktop | Tablet | Mobile | 
+|---|---|---|
+| ![Desktop](public/Pots-desktop.png) | ![Tablet](public/Pots-tablet.png) | ![Mobile](public/Pots-mobile.png) |
+
+### Recurring Bills
+| Desktop | Tablet | Mobile | 
+|---|---|---|
+| ![Desktop](public/Recurring-bills-desktop.png) | ![Tablet](public/Recurring-bills-tablet.png) | ![Mobile](public/Recurring-bills-mobile.png) |
+
+---
+
+## To-do
+
+- [ ] Animations and transitions (e.g. sidebar open/close)
+- [ ] Form for adding new transactions and recurring bills
+- [ ] Fix scrollbar positioning (overlapping content)
+- [ ] UI polish and code refactor for readability
+
+---
+
+## Credits
+
+This project is a solution to a [Frontend Mentor](https://www.frontendmentor.io) challenge. I do not own the rights to any assets used.
+
+---
+
+*Developed by **RR Nofuente***
